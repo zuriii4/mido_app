@@ -1,0 +1,22 @@
+# Prostredie / secrets
+.venv/
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+logs/
+
+# IDE
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
