@@ -1,0 +1,41 @@
+{% extends 'kiosk/base.html' %}
+
+{% block title %}MIDo - Prilož kartu{% endblock %}
+
+{% block content %}
+<div class="container vh-100 d-flex flex-column justify-content-center align-items-center">
+
+    <!-- Logo / Nazov -->
+    <h1 class="display-2 fw-bold text-primary mb-4">MIDo</h1>
+    <p class="lead text-secondary mb-5">Podpisový kioskový systém</p>
+
+    <!-- Hlavna akcia -->
+    <div class="text-center">
+        <div class="display-1 mb-4">🏷️</div>
+        <h2 class="mb-4">Priložte kartu</h2>
+        <p class="text-muted mb-3">Priblížte RFID kartu k čítačke</p>
+
+        <!--
+            Skryty formular — focus je rovno tu, takze ak citacka
+            posle UID + Enter, formular sa odosle automaticky.
+            Pre DEV: manualne zadaj rfid_uid a stlac Enter.
+        -->
+        <form method="post" action="{% url 'kiosk:home' %}">
+            {% csrf_token %}
+            <input type="text"
+                   name="rfid_uid"
+                   id="rfid-input"
+                   class="form-control form-control-lg text-center"
+                   placeholder="rfid_uid (dev: 000000)"
+                   autocomplete="off"
+                   autofocus>
+        </form>
+    </div>
+
+    <!-- Info riadok dole -->
+    <div class="mt-auto pt-5 text-center text-muted small">
+        <p>© {{ request|date:"Y" }} MIDo s.r.o.</p>
+    </div>
+
+</div>
+{% endblock %}

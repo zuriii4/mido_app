@@ -1,0 +1,151 @@
+### ============================================
+### MIDo App - kompletny testovaci subor
+### Pouzitie: postupne spustaj requesty z hora nadol
+### ============================================
+
+
+### ============================================
+### AUTH
+### ============================================
+
+### 1. RFID Login (kiosk)
+# @name kiosk_login
+POST http://127.0.0.1:8000/api/auth/rfid-login/
+Accept: application/json
+Content-Type: application/json
+X-Device-Token: 091de3bc8f2335bf5044e221ba05324c2e69496eac6f365bc0bb9a753e81e3c1
+
+{"rfid_uid": "000000"}
+
+
+### 2. Logout
+POST http://127.0.0.1:8000/api/auth/logout/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### ============================================
+### DOCUMENTS
+### ============================================
+
+### 3. List documents (viditelne pre usera)
+# @name documents
+GET http://127.0.0.1:8000/api/documents/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### 4. Document detail (obsahuje current_version s attachments)
+GET http://127.0.0.1:8000/api/documents/{{documents.response.body.results[0].id}}/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### 5. Version file (stiahnutie PDF suboru)
+GET http://127.0.0.1:8000/api/documents/versions/{{documents.response.body.results[0].current_version_id}}/file/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### ============================================
+### NOTIFICATIONS
+### ============================================
+
+### 6. List notifications
+# @name notifications
+GET http://127.0.0.1:8000/api/notifications/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### 7. Unread notifications
+GET http://127.0.0.1:8000/api/notifications/unread/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### 8. Mark as read (PATCH)
+PATCH http://127.0.0.1:8000/api/notifications/mark-as-read/{{notifications.response.body.results[0].id}}/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+Content-Type: application/json
+
+{"is_read": true}
+
+
+### ============================================
+### SIGNATURES
+### ============================================
+
+### 9. Sign document (potrebny version_id z documents listu)
+POST http://127.0.0.1:8000/api/signatures/sign/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+Content-Type: application/json
+
+{
+    "document_version_id": "{{documents.response.body.results[0].current_version_id}}",
+    "rfid_uid": "000000"
+}
+
+
+### 10. My signatures (historia podpisov)
+GET http://127.0.0.1:8000/api/signatures/mine/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### 11. Who signed document (admin)
+GET http://127.0.0.1:8000/api/signatures/reports/document/{{documents.response.body.results[0].id}}/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### 12. Who has not signed (admin)
+GET http://127.0.0.1:8000/api/signatures/reports/unsigned/?document_id={{documents.response.body.results[0].id}}
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### ============================================
+### USERS
+### ============================================
+
+### 13. Me (prihlaseny user)
+# @name me
+GET http://127.0.0.1:8000/api/users/me/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### 14. List all users (admin)
+GET http://127.0.0.1:8000/api/users/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### 15. User detail
+GET http://127.0.0.1:8000/api/users/{{kiosk_login.response.body.user.id}}/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### 16. Update user
+PATCH http://127.0.0.1:8000/api/users/{{kiosk_login.response.body.user.id}}/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+Content-Type: application/json
+
+{
+    "firstname": "Meno",
+    "lastname": "Priezvisko"
+}
+
+
+### 17. Create user (admin)
+POST http://127.0.0.1:8000/api/users/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+Content-Type: application/json
+
+{
+    "username": "novy.user",
+    "firstname": "Novy",
+    "lastname": "User",
+    "rfid_uid": "999999",
+    "external_id": "EXT-001"
+}
+
+
+### 18. Business units
+GET http://127.0.0.1:8000/api/users/business-units/
+Authorization: Bearer {{kiosk_login.response.body.token}}
+
+
+### 19. Profession categories
+GET http://127.0.0.1:8000/api/users/profession-categories/
+Authorization: Bearer {{kiosk_login.response.body.token}}

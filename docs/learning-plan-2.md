@@ -21,13 +21,13 @@ aktualnu verziu dokumentu nepodpisanu.
 4. Po kazdom auto-importe skontroluj from riadky hore v subore.
 
 ## Stav
-- [ ] Etapa 1: Service - najdi nepodpisujucich (get_unsigned_users_for_document)
-- [ ] Etapa 2: Service - vytvor pripomienky (create_reminder_notifications)
-- [ ] Etapa 3: Management command remind_unsigned
-- [ ] Etapa 4: Celery task v notifications/tasks.py
-- [ ] Etapa 5: Beat schedule (denne 6:00)
-- [ ] Etapa 6: Testy
-- [ ] Etapa 7: Explain back + review celeho modulu
+- [x] Etapa 1: Service - najdi nepodpisujucich (get_signed/get_unsigned_users_for_document)
+- [x] Etapa 2: Service - vytvor pripomienky (create_reminder_notifications)
+- [x] Etapa 3: Management command remind_unsigned (+ --dry-run, --document-number)
+- [x] Etapa 4: Celery task v notifications/tasks.py (send_reminders, send_reminder_for_document)
+- [x] Etapa 5: Beat schedule (send-reminders-daily, kazdy den 6:00)
+- [x] Etapa 6: Testy (7 testov - GetSignedUsersTest + CreateReminderNotificationsTest)
+- [ ] Etapa 7: Explain back + review
 
 ---
 

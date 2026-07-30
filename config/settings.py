@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'rfid_auth',
     'integrations',
     'notifications',
+
+    'kiosk',
 ]
 
 # Microsoft Graph / SharePoint (app-only, client-credentials)
@@ -208,6 +210,10 @@ CELERY_BEAT_SCHEDULE = {
     'cleanup-sessions-daily': {
         'task': 'rfid_auth.cleanup_sessions',
         'schedule': crontab(hour=2, minute=30),
+    },
+    'send-reminders-daily': {
+        'task': 'notifications.send_reminders',
+        'schedule': crontab(hour=6, minute=0),
     },
 }
 

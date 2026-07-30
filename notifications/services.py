@@ -76,8 +76,11 @@ def get_signed_users_for_document(document):
     if document.current_version is None:
         return User.objects.none()
 
+    current = document.current_version
+    if current is None:
+        return User.objects.none()
     signed_users = User.objects.filter(
-        signature__document_version=document.current_version
+        signatures__document_version_id=current.pk
     ).distinct()
     return signed_users 
 
@@ -103,7 +106,13 @@ def create_reminder_notification_for_document(document):
     """
     Creates a reminder notification for all active users who have not signed the document.
     """
-    unsigned_users = get_unsigned_users_for_document(document)
+    already_notified_ids = set(
+        Notification.objects.filter(document=document).values_list('user_id', flat=True)
+    )
+
+    unsigned_users = get_unsigned_users_for_document(document).exclude(
+        pk__in=already_notified_ids
+    )
 
     notifications = [
         Notification(
