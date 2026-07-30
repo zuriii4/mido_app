@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'signatures',
     'rfid_auth',
     'integrations',
+    'notifications',
 ]
 
 # Microsoft Graph / SharePoint (app-only, client-credentials)

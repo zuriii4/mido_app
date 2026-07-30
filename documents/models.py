@@ -4,10 +4,6 @@ from core.models import BaseModel
 
 
 class Document(BaseModel):
-    # Identita dokumentu = Cislo dokumentu (acColCisloDokumentu), napr. "OS-90-01/21".
-    # POZOR: v SharePointe nie je unikatne v case - revizia dokumentu vznika ako NOVA
-    # list-item polozka s rovnakym cislom a vyssou verziou (acColVerzia: - < A < B < ...).
-    # Preto identita/zoskupovanie je podla cisla, a jednotlive verzie su DocumentVersion.
     document_number = models.CharField(max_length=100, unique=True, db_index=True)
     title = models.CharField(max_length=250)  # nazov aktualnej verzie
 
@@ -25,7 +21,7 @@ class Document(BaseModel):
     )
     is_active = models.BooleanField(default=True)
 
-    # Metadata aktualnej verzie (source: acLibPlatne list item)
+    # source: acLibPlatne list item
     ac_dokument_id = models.CharField(max_length=100, db_index=True, blank=True, default='')
     ac_master_id = models.CharField(max_length=100, blank=True, default='')
     content_type_name = models.CharField(max_length=150, blank=True, default='')

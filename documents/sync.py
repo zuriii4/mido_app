@@ -1,11 +1,3 @@
-"""
-Denny sync dokumentov.
-
-Identita dokumentu = Cislo dokumentu (acColCisloDokumentu). Kazda list-item polozka
-v acLibPlatne je jedna VERZIA (acColVerzia: '-', 'A', 'B', ...). Revizia dokumentu
-vznika ako nova polozka s rovnakym cislom a vyssou verziou - grupujeme podla cisla,
-verzie ukladame ako DocumentVersion a aktualna je najvyssia verzia pritomna v Platne.
-"""
 import logging
 from collections import defaultdict
 
@@ -14,6 +6,7 @@ from django.utils import timezone
 
 from documents.models import Attachment, Document, DocumentVersion
 from integrations.sharepoint import get_sharepoint_client
+from notifications.services import create_notifications_for_document
 
 logger = logging.getLogger(__name__)
 
@@ -112,6 +105,10 @@ def _sync_document_group(client, number, group, run_started_at, stats):
                              number, item['version_label'], item['sharepoint_id'])
 
     _set_current_version(document, group)
+    created_notifications = create_notifications_for_document(document)
+    if created_notifications:
+        logger.info('Dokument %r: vytvorene %d notifikacie pre novych podpisujucich',
+                    document.document_number, created_notifications)
 
 
 def _sync_one_version(client, document, item, stats):

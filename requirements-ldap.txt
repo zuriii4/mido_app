@@ -1,0 +1,4 @@
+# Optional LDAP auth (not used by current settings backends).
+# Requires OpenLDAP dev headers + MSVC Build Tools on Windows.
+# Prefer Python 3.12/3.13 — wheels for 3.14 are often missing.
+django-auth-ldap>=4.6

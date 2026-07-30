@@ -1,11 +1,3 @@
-"""
-Viditelnost dokumentov (PLAN.md sekcia F).
-
-Semantika:
-1. bazova brana: required_bu / required_pc na dokumente (null = bez obmedzenia),
-2. ak dokument ma inclusion pravidla (v platnom casovom okne), aspon jedno musi sediet,
-3. akekolvek matchujuce exclusion pravidlo dokument odoberie.
-"""
 from django.db.models import Exists, OuterRef, Q
 from django.utils import timezone
 
