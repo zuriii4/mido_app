@@ -94,9 +94,13 @@ class SharePointSyncClient:
             'size': data.get('size'),
         }
 
-    def download_document_pdf(self, drive_id: str, drive_item_id: str) -> bytes:
-        """Stiahne obsah suboru konvertovany na PDF (docx -> pdf on-the-fly cez Graph)."""
+    def download_document_pdf(self, drive_id: str, drive_item_id: str, file_name: str = '') -> bytes:
+        """Stiahne obsah suboru konvertovany na PDF (docx -> pdf on-the-fly cez Graph).
+        Uz existujuce PDF sa nekonvertuje znova - konverziu pdf->pdf Graph
+        odmietne (406 Not Acceptable), tak sa stiahne original."""
         url = f'drives/{drive_id}/items/{drive_item_id}/content'
+        if file_name.lower().endswith('.pdf'):
+            return self.graph.get_bytes(url)
         return self.graph.get_bytes(url, params={'format': 'pdf'})
 
     def list_attachment_folder(self, ac_dokument_id: str) -> list[dict]:

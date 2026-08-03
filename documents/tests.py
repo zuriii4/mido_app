@@ -65,7 +65,7 @@ class FakeSharePointClient:
     def get_drive_item_for_list_item(self, sharepoint_id):
         return {'drive_id': 'drive-1', 'drive_item_id': f'item-{sharepoint_id}', 'size': 100}
 
-    def download_document_pdf(self, drive_id, drive_item_id):
+    def download_document_pdf(self, drive_id, drive_item_id, file_name=''):
         self.downloaded_documents.append(drive_item_id)
         return b'%PDF-1.4 fake document content'
 

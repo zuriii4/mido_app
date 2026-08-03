@@ -17,7 +17,6 @@ class KioskView(View):
     template_name = 'kiosk/home.html'
 
     def get(self, request):
-        # Ak nie je nastaveny device token, presmeruj na setup
         if not request.kiosk_device:
             return redirect('kiosk:device-setup')
         return render(request, self.template_name)
@@ -32,7 +31,7 @@ class KioskView(View):
         """Vrati HTML odpoved pre HTMX (aby sa zobrazila chyba v #login-status)."""
         return HttpResponse(
             f'<div class="alert alert-danger">{message}</div>',
-            status=200,  # 200 aby HTMX swapol, nie 4xx
+            status=200,  
         )
 
     def _htmx_redirect(self, url):
@@ -188,24 +187,18 @@ class LogoutView(View):
     """Odhlasi RFID usera (zachova device token - ten je per-device, nie per-user)."""
 
     def get(self, request):
-        # 1. Zachovaj device token pred flush (per-device, nie per-user)
         device_token = request.session.get('kiosk_device_token')
 
-        # 2. Revokuj user session v databaze
         rfid_session = request.rfid_session
         if rfid_session and not rfid_session.revoked_at:
             rfid_session.revoked_at = timezone.now()
             rfid_session.save(update_fields=['revoked_at'])
 
-        # 3. Vymaz user data zo session (nie flush - ten by zmazal aj device token)
         for key in ['rfid_token', '_auth_user_id', '_auth_user_backend', '_auth_user_hash']:
             if key in request.session:
                 del request.session[key]
 
-        # 4. Vyčisti messages aby sa nezobrazili stary
-        # messages sa samy vyčistia pri dalsom requeste
 
-        # 5. Obnov device token (zostava v session)
         if device_token:
             request.session['kiosk_device_token'] = device_token
 

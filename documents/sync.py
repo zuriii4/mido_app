@@ -132,7 +132,8 @@ def _sync_one_version(client, document, item, stats):
 
     # (re)stiahni PDF snapshot tejto verzie
     drive_item = client.get_drive_item_for_list_item(item['sharepoint_id'])
-    pdf_bytes = client.download_document_pdf(drive_item['drive_id'], drive_item['drive_item_id'])
+    pdf_bytes = client.download_document_pdf(
+        drive_item['drive_id'], drive_item['drive_item_id'], item['file_name'])
     if version.file_path:
         version.file_path.delete(save=False)
     filename = f"{document.id}_{item['sharepoint_id']}_v{version.version_label}.pdf"
