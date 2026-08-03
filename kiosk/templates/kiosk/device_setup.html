@@ -1,0 +1,54 @@
+{% extends 'kiosk/base.html' %}
+{% load static %}
+
+{% block title %}MIDo - Nastavenie zariadenia{% endblock %}
+
+{% block content %}
+
+<video autoplay muted loop playsinline class="bg-video">
+    <source src="{% static 'kiosk/assets/intro.mp4' %}" type="video/mp4">
+</video>
+
+<div class="inner-overlay"></div>
+
+<!-- Centrovany setup -->
+<div class="kiosk-content">
+
+    <h1 class="kiosk-title">MIDo</h1>
+    <h2 class="kiosk-subtitle">Nastavenie zariadenia</h2>
+
+    <p class="text-white-50 mb-4">Zadajte kiosk device token (z administrácie)</p>
+
+    <!-- HTMX form - vrati chybu v #setup-status alebo redirect -->
+    <form method="post"
+          hx-post="{% url 'kiosk:device-setup' %}"
+          hx-target="#setup-status"
+          hx-swap="innerHTML"
+          class="kiosk-setup-form">
+        {% csrf_token %}
+        <input type="text"
+               name="device_token"
+               id="device-token-input"
+               class="form-control text-center"
+               placeholder="device token"
+               autocomplete="off"
+               spellcheck="false"
+               autocapitalize="off"
+               autocorrect="off"
+               required
+               minlength="32"
+               maxlength="64">
+        <button type="submit" class="btn btn-primary mt-3">
+            Potvrdiť
+        </button>
+    </form>
+
+    <div id="setup-status" class="kiosk-messages" role="alert" aria-live="polite"></div>
+
+</div>
+
+<div class="kiosk-footer">
+    <small>© {% now "Y" %} Tatravagónka a.s. Poprad</small>
+</div>
+
+{% endblock %}

@@ -1,41 +1,78 @@
 {% extends 'kiosk/base.html' %}
+{% load static %}
 
 {% block title %}MIDo - Prilož kartu{% endblock %}
 
 {% block content %}
-<div class="container vh-100 d-flex flex-column justify-content-center align-items-center">
 
-    <!-- Logo / Nazov -->
-    <h1 class="display-2 fw-bold text-primary mb-4">MIDo</h1>
-    <p class="lead text-secondary mb-5">Podpisový kioskový systém</p>
+<!-- Video pozadie -->
+<video autoplay muted loop playsinline class="bg-video">
+    <source src="{% static 'kiosk/assets/intro.mp4' %}" type="video/mp4">
+</video>
 
-    <!-- Hlavna akcia -->
-    <div class="text-center">
-        <div class="display-1 mb-4">🏷️</div>
-        <h2 class="mb-4">Priložte kartu</h2>
-        <p class="text-muted mb-3">Priblížte RFID kartu k čítačke</p>
+<!-- Modry overlay -->
+<div class="inner-overlay"></div>
 
-        <!--
-            Skryty formular — focus je rovno tu, takze ak citacka
-            posle UID + Enter, formular sa odosle automaticky.
-            Pre DEV: manualne zadaj rfid_uid a stlac Enter.
-        -->
-        <form method="post" action="{% url 'kiosk:home' %}">
-            {% csrf_token %}
-            <input type="text"
-                   name="rfid_uid"
-                   id="rfid-input"
-                   class="form-control form-control-lg text-center"
-                   placeholder="rfid_uid (dev: 000000)"
-                   autocomplete="off"
-                   autofocus>
-        </form>
-    </div>
+<!-- Logo vlavo hore -->
+<a href="{% url 'kiosk:home' %}" class="kiosk-logo">
+    <img src="{% static 'kiosk/assets/logo-tatravagonka-white.svg' %}" alt="Tatravagonka" width="180">
+</a>
 
-    <!-- Info riadok dole -->
-    <div class="mt-auto pt-5 text-center text-muted small">
-        <p>© {{ request|date:"Y" }} MIDo s.r.o.</p>
-    </div>
+<!-- Hlavny obsah - centrovany -->
+<div class="kiosk-content" id="kiosk-content">
+
+    <h1 class="kiosk-title">MIDo</h1>
+    <h2 class="kiosk-subtitle">Priložte kartu</h2>
+
+    <!-- ID card ikona - pulzuje kazdych 5s -->
+    <i class="icon-card">
+        <img src="{% static 'kiosk/assets/id-card-svgrepo-com.svg' %}" alt="ID card">
+    </i>
+
+    <!-- SKRYTY FORM - citačka pise do neho, Enter submitne -->
+    <form method="post" action="{% url 'kiosk:home' %}"
+          class="kiosk-form"
+          hx-post="{% url 'kiosk:home' %}"
+          hx-trigger="submit"
+          hx-target="#login-status"
+          hx-swap="innerHTML"
+          hx-on::after-request="window.kioskApp.afterScan(event)"
+          hx-on::response-error="window.kioskApp.handleError(event)">
+        {% csrf_token %}
+        <input type="text"
+               name="rfid_uid"
+               id="rfid-input"
+               inputmode="none"
+               pattern="[A-Za-z0-9]{{ '{4,32}' }}"
+               maxlength="32"
+               autocomplete="off"
+               autocapitalize="off"
+               autocorrect="off"
+               spellcheck="false"
+               tabindex="-1"
+               aria-hidden="true"
+               autofocus>
+    </form>
+
+    <!-- Login status - tu sa zobrazia chyby -->
+    <div id="login-status" role="alert" aria-live="polite"></div>
 
 </div>
+
+<!-- Scroll-down sipka uplne dole -->
+<div class="scroll-down">
+    <i class="icon-down">
+        <img src="{% static 'kiosk/assets/down-chevron-svgrepo-com.svg' %}" alt="Dole">
+    </i>
+</div>
+
+<!-- Copyright uplne dole -->
+<div class="kiosk-footer">
+    <small>© {% now "Y" %} Tatravagónka a.s. Poprad</small>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+{# JavaScript je v externom subore kiosk/static/kiosk/kiosk.js #}
 {% endblock %}

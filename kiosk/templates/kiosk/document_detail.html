@@ -1,0 +1,11 @@
+{% extends 'kiosk/base.html' %}
+
+{% block title %}MIDo - Dokument{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1>Document detail</h1>
+    <p>PK: {{ document_pk }}</p>
+    <a href="{% url 'kiosk:dashboard' %}" class="btn btn-secondary">Späť</a>
+</div>
+{% endblock %}

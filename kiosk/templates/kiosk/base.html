@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="sk">
 <head>
@@ -15,8 +16,8 @@
     <script src="https://unpkg.com/htmx.org@1.9.12"
             integrity="sha384-0bS8MmNIXqB6KQoBDNiUx5Oeb6or6hXgR2ai9qBcG7M3vR3bGqNmZk2uWvJQ7fZ"
             crossorigin="anonymous"></script>
-
     <!-- Extra styles -->
+    <link rel="stylesheet" href="{% static 'kiosk/kiosk.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 <body class="bg-light d-flex flex-column" style="min-height: 100vh;">
@@ -25,6 +26,9 @@
     <main class="flex-grow-1">
         {% block content %}{% endblock %}
     </main>
+
+    <!-- Kiosk JavaScript -->
+    <script src="{% static 'kiosk/kiosk.js' %}" defer></script>
 
     <!-- Bootstrap JS bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -1,0 +1,475 @@
+/* === Kiosk styles === */
+
+/* Google Fonts - Rajdhani (Tatravagonka brand font) */
+@import url('https://fonts.googleapis.com/css?family=Rajdhani:400,500,600,700&display=swap');
+
+/* === Tatravagonka farebna paleta === */
+:root {
+    --tv-blue: #003366;        /* primarna - logo, nadpisy */
+    --tv-blue-dark: #002952;   /* hover, aktivne */
+    --tv-gold: #c8b281;        /* akcent - tlacidla, linky */
+    --tv-gold-dark: #b49653;   /* hover akcent */
+    --tv-gray: #cacac4;        /* svetla seda - border, secondary text */
+    --tv-light: #f2f2f7;       /* svetle pozadie */
+    --tv-dark: #333;           /* tmavy text */
+    --tv-white: #fefefe;
+}
+
+/* === Global styles === */
+html, body {
+    /* Kiosk mod - ziaden kurzor */
+    cursor: none;
+}
+
+html {
+    /* Skrytie textu selection (kiosk) */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body {
+    font-family: 'Rajdhani', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+    font-weight: 500;
+    color: var(--tv-white);
+    background: var(--tv-blue);
+}
+
+/* === Typografia (override Bootstrap) === */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    color: var(--tv-gold);
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    text-rendering: optimizeLegibility;
+}
+
+/* Kiosk = 1080p display, takze nadpisy su VELKE */
+h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+h3 {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+p, label, input, button, .lead {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+}
+
+.lead {
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: var(--tv-gray);
+}
+
+/* === Video pozadie === */
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.5);
+}
+
+.inner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 51, 102, 0.85);
+    z-index: 0;
+}
+
+.content-overlay {
+    position: relative;
+    z-index: 1;
+}
+
+/* === Kiosk logo (top-left) === */
+.kiosk-logo {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 100;
+    display: block;
+    transition: transform 0.2s;
+}
+
+.kiosk-logo:hover {
+    transform: scale(1.05);
+}
+
+.kiosk-logo img {
+    height: auto;
+    display: block;
+    max-width: 180px;
+}
+
+/* === Velky input pre kiosk display === */
+/* Skryty input - visually-hidden ale focusovatelny (moderny sr-only) */
+#rfid-input {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);  /* moderny nahodzu clip (ktory je deprecated) */
+    white-space: nowrap;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#rfid-input:focus {
+    outline: none;
+}
+
+/* Form je tiez skryty ale v DOM (aby HTMX ho vedel najst) */
+.kiosk-form {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+}
+
+/* === Login status (chyby z HTMX) === */
+#login-status {
+    min-height: 60px;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+#login-status .alert {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+/* === Vizualna odozva pri citani karty === */
+.kiosk-content.scanning {
+    animation: scan-flash 0.5s ease-in-out;
+}
+
+@keyframes scan-flash {
+    0%, 100% { background: transparent; }
+    50% { background: rgba(200, 178, 129, 0.15); }
+}
+
+/* === Pulzujuci kruh (namiesto statickej ikony) === */
+.pulse-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(200, 178, 129, 0.4);
+    margin: 0 auto 2rem;
+    position: relative;
+    animation: pulse 2s ease-in-out infinite;
+    border: 3px solid var(--tv-light);
+}
+
+.pulse-circle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--tv-gold);
+}
+
+.pulse-circle::after {
+    content: '\63';
+    font-family: 'Rajdhani', sans-serif;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--tv-blue);
+    z-index: 2;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.6;
+    }
+}
+
+/* === Tlacidla (Tatravagonka custom) === */
+.btn-primary {
+    background-color: var(--tv-gold);
+    color: var(--tv-blue);
+    border: none;
+    border-radius: 0;
+    padding: 0.85em 1.5em;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+    transition: all 0.25s ease-out;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--tv-gold-dark);
+    color: var(--tv-white);
+}
+
+.btn-outline-secondary {
+    border: 2px solid var(--tv-gray);
+    color: var(--tv-white);
+    background: transparent;
+    border-radius: 0;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.6em 1.2em;
+}
+
+.btn-outline-secondary:hover {
+    background: var(--tv-gold);
+    color: var(--tv-blue);
+    border-color: var(--tv-gold);
+}
+
+/* === Alerty === */
+.alert {
+    border-radius: 0;
+    border: 2px solid;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+    font-size: 1.25rem;
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.15);
+    border-color: #dc3545;
+    color: #ff6b7a;
+}
+
+.alert-success {
+    background: rgba(200, 178, 129, 0.15);
+    border-color: var(--tv-gold);
+    color: var(--tv-gold);
+}
+
+/* === Chybovy stav inputu === */
+#rfid-input.is-invalid {
+    border-color: #dc3545;
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* === Scroll down animacia (zo stylov TV) === */
+.scroll-down {
+    z-index: 1;
+    position: absolute;
+    bottom: 2rem;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+}
+
+.scroll-down i {
+    display: block;
+    font-size: 2em;
+    color: var(--tv-gold);
+    -webkit-animation: b .6s linear infinite alternate;
+    animation: b .6s linear infinite alternate;
+}
+
+@keyframes b {
+    0% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    100% {
+        -webkit-transform: translateY(10px);
+        transform: translateY(10px);
+    }
+}
+
+
+/* === Ikony (id-card + down-chevron) === */
+.icon-card,
+.icon-down {
+    display: inline-block;
+    line-height: 0;
+}
+
+.icon-down img {
+    /* Gold filter IBA pre sipku */
+    filter: invert(72%) sepia(38%) saturate(450%) hue-rotate(7deg) brightness(100%) contrast(88%);
+    -webkit-filter: invert(72%) sepia(38%) saturate(450%) hue-rotate(7deg) brightness(100%) contrast(88%);
+}
+
+/* Karta ostava biela (default fill #fff v SVG) */
+
+/* Velkosti ikon pre kiosk 1080p */
+.icon-card img {
+    width: 120px;
+    height: 120px;
+}
+
+.icon-down img {
+    width: 60px;
+    height: 60px;
+}
+
+/* === Nepravidelna pulzacia id-card === */
+.icon-card {
+    /* 5 sekund celkovo, pulz trva ~0.75s, zvysok stoji */
+    animation: pulse-periodic 5s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes pulse-periodic {
+    0%   { transform: scale(1);    opacity: 1; }
+    3%   { transform: scale(1.10); opacity: 0.92; }
+    7%   { transform: scale(1.22); opacity: 0.70; }
+    11%  { transform: scale(0.95); opacity: 1; }
+    15%  { transform: scale(1);    opacity: 1; }
+    100% { transform: scale(1);    opacity: 1; }
+}
+
+/* === Scroll-down sipka === */
+.scroll-down {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    right: -1;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+    z-index: 5;
+}
+
+.scroll-down .icon-down {
+    -webkit-animation: b .6s linear infinite alternate;
+    animation: b .6s linear infinite alternate;
+    display: inline-block;
+}
+
+
+/* === Centrovany obsah kiosku === */
+.kiosk-content {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+}
+
+.kiosk-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--tv-gold);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin: 0 0 0.5rem 0;
+    line-height: 1;
+}
+
+.kiosk-subtitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 2.25rem;
+    font-weight: 500;
+    color: var(--tv-white);
+    margin: 0 0 1.5rem 0;
+    line-height: 1;
+}
+
+.kiosk-content .icon-card {
+    margin: 0 0 1rem 0;
+}
+
+.kiosk-messages {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 1rem;
+}
+
+.kiosk-footer {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: var(--tv-gray);
+    font-family: 'Rajdhani', sans-serif;
+    z-index: 2;
+}
+
+
+/* === Device setup form === */
+.kiosk-setup-form {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.kiosk-setup-form input {
+    font-family: 'Rajdhani', monospace;
+    font-size: 1.25rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--tv-blue);
+    border: 2px solid var(--tv-gold);
+    padding: 0.75rem 1rem;
+    text-align: center;
+}
+
+.kiosk-setup-form input:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(200, 178, 129, 0.4);
+    border-color: var(--tv-gold);
+}
+
+.kiosk-setup-form button {
+    min-width: 200px;
+}

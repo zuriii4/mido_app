@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
+    path('', RedirectView.as_view(url='/kiosk/', permanent=False)),
     path('admin/', admin.site.urls),
     path('kiosk/', include('kiosk.urls')),
     path('api/users/', include('users.urls')),
