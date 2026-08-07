@@ -112,7 +112,6 @@ class AttachmentFileView(APIView):
         )
         if attachment is None or not attachment.file_path:
             raise Http404
-        # pristup len cez viditelny dokument
         _visible_version_or_404(request.user, attachment.document_version_id)
 
         if attachment.converted_to_pdf:

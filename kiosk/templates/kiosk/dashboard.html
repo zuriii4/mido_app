@@ -30,7 +30,7 @@
         {% if documents %}
             <div class="documents-list">
                 {% for doc in documents %}
-                    <a href="#" class="document-card">
+                    <a href="{% url 'kiosk:document' pk=doc.pk %}" class="document-card">
                         <div class="document-icon">&#128196;</div>
                         <div class="document-info">
                             <div class="document-number">{{ doc.document_number }}</div>

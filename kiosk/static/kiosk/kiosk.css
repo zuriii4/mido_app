@@ -710,3 +710,188 @@ main.flex-grow-1 {
     min-height: 0;
     overflow: hidden;
 }
+
+/* === Document viewer (sidebar + PDF) === */
+.document-viewer-layout {
+    display: flex;
+    height: 100vh;
+    background: var(--tv-light);
+    overflow: hidden;
+}
+
+.documents-sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    background: var(--tv-blue-dark);
+    color: var(--tv-white);
+    overflow-y: auto;
+    padding: 1.5rem 1rem;
+    border-right: 2px solid var(--tv-gold);
+}
+
+.documents-sidebar h3 {
+    color: var(--tv-gold);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    margin: 0 0 1rem 0;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+}
+
+.documents-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.document-group {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.doc-btn {
+    display: block;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--tv-white);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: left;
+    transition: all 0.15s ease-out;
+}
+
+.doc-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--tv-gold);
+    color: var(--tv-white);
+    text-decoration: none;
+}
+
+.document-group.active .doc-btn {
+    background: var(--tv-gold);
+    color: var(--tv-blue-dark);
+    border-color: var(--tv-gold);
+}
+
+.doc-number {
+    font-family: 'Rajdhani', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--tv-blue);
+}
+
+.document-group.active .doc-number {
+    color: var(--tv-blue-dark);
+}
+
+.doc-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-top: 0.2rem;
+    line-height: 1.2;
+    color: var(--tv-white);
+}
+
+.document-group.active .doc-title {
+    color: var(--tv-blue-dark);
+    font-weight: 600;
+}
+
+/* Attachments pod aktivnym dokumentom */
+.attachments-list {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.25);
+    border-left: 3px solid var(--tv-gold);
+    border-radius: 0 0 8px 8px;
+}
+
+.attachments-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--tv-gold);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+}
+
+.att-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    color: var(--tv-white);
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    margin-bottom: 0.25rem;
+    transition: background 0.15s;
+}
+
+.att-btn:hover {
+    background: rgba(200, 178, 129, 0.2);
+    color: var(--tv-gold);
+    text-decoration: none;
+}
+
+.att-icon {
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+
+.att-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.att-size {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: #999;
+    font-family: 'Rajdhani', monospace;
+}
+
+/* Hlavna PDF oblast */
+.viewer-area {
+    flex: 1;
+    display: flex;
+    background: #1e1e1e;
+    overflow: hidden;
+}
+
+.pdf-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: white;
+}
+
+.placeholder {
+    margin: auto;
+    color: #999;
+    text-align: center;
+    padding: 2rem;
+}
+
+.placeholder-icon {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+}
+
+.placeholder h2 {
+    color: #ccc;
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.empty-state-sidebar {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #999;
+    font-size: 0.9rem;
+}

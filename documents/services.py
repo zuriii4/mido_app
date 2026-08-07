@@ -94,4 +94,3 @@ def get_required_users(document):
 
     return users
 
-

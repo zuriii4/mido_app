@@ -1,11 +1,56 @@
 {% extends 'kiosk/base.html' %}
+{% load static %}
 
-{% block title %}MIDo - Dokument{% endblock %}
+{% block title %}{{ document.document_number }} - MIDo{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <h1>Document detail</h1>
-    <p>PK: {{ document_pk }}</p>
-    <a href="{% url 'kiosk:dashboard' %}" class="btn btn-secondary">Späť</a>
+<div class="document-viewer-layout">
+
+    <!-- Sidebar: zoznam dokumentov + attachments aktivneho dokumentu -->
+    <aside class="documents-sidebar">
+        <h3>Dokumenty</h3>
+        <div class="documents-list">
+            <div class="document-group active">
+                <div class="doc-btn">
+                    <div class="doc-number">{{ document.document_number }}</div>
+                    <div class="doc-title">{{ document.title }}</div>
+                </div>
+
+                {% if attachments %}
+                    <div class="attachments-list">
+                        <div class="attachments-label">Prílohy:</div>
+                        {% for att in attachments %}
+                            <a href="{% url 'documents:attachment-file' pk=att.pk %}"
+                                class="att-btn"
+                                target="_blank"
+                                rel="noopener">
+                                <span class="att-icon">&#128206;</span>
+                                <span class="att-name">{{ att.file_name }}</span>
+                                {% if att.file_size %}
+                                    <span class="att-size">{{ att.file_size|filesizeformat }}</span>
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </aside>
+
+    <!-- Hlavna oblast: PDF preview -->
+    <div class="viewer-area">
+        {% if current_version and current_version.file_path %}
+            <iframe src="{% url 'documents:document-version-file' pk=current_version.pk %}"
+                    class="pdf-iframe"
+                    title="{{ document.document_number }} - {{ document.title }}"></iframe>
+        {% else %}
+            <div class="placeholder">
+                <div class="placeholder-icon">&#128196;</div>
+                <h2>Dokument nie je k dispozícii</h2>
+                <p>Súbor ešte nebol stiahnutý alebo aktuálna verzia neexistuje.</p>
+            </div>
+        {% endif %}
+    </div>
+
 </div>
 {% endblock %}

@@ -185,7 +185,7 @@ class DashboardView(View):
         })
 
 class DocumentDetailView(View):
-    """Detail dokumentu na podpisanie."""
+    """Detail dokumentu s PDF preview + attachments v sidebare."""
 
     template_name = 'kiosk/document_detail.html'
 
@@ -195,8 +195,57 @@ class DocumentDetailView(View):
         document = get_visible_documents(request.user).filter(pk=pk).first()
         if document is None:
             return redirect('kiosk:dashboard')
-        return render(request, self.template_name, {'document': document})
 
+        current_version = document.current_version
+        attachments = current_version.attachments.all() if current_version else []
+
+        return render(request, self.template_name, {
+            'document': document,
+            'current_version': current_version,
+            'attachments': attachments,
+        })
+
+
+class AttachmentDetailView(View):
+    """Detail prilohy dokumentu."""
+
+    template_name = 'kiosk/attachment_detail.html'
+
+    def get(self, request, pk):
+        if not request.rfid_session:
+            return redirect('kiosk:home')
+        attachment = get_visible_documents(request.user).filter(attachments__pk=pk).first()
+        if attachment is None:
+            return redirect('kiosk:dashboard')
+        return render(request, self.template_name, {'attachment': attachment})
+
+class AttachmentsOverviewView(View):
+    """Zoznam vsetkych priloh dokumentov."""
+
+    template_name = 'kiosk/attachments_overview.html'
+
+    def get(self, request):
+        if not request.rfid_session:
+            return redirect('kiosk:home')
+        documents = get_visible_documents(request.user).prefetch_related('attachments')
+        attachments = []
+        for doc in documents:
+            attachments.extend(doc.attachments.all())
+        return render(request, self.template_name, {'attachments': attachments})
+
+
+class MarkAsReadNotificationView(View):
+    """Oznaci notifikaciu ako precitanu (AJAX)."""
+
+    def post(self, request, notification_id):
+        if not request.rfid_session:
+            return JsonResponse({'error': 'Nie ste prihlásený.'}, status=403)
+        notification = Notification.objects.filter(pk=notification_id, user=request.user).first()
+        if notification is None:
+            return JsonResponse({'error': 'Notifikácia neexistuje.'}, status=404)
+        notification.is_read = True
+        notification.save(update_fields=['is_read'])
+        return JsonResponse({'success': True})
 
 class LogoutView(View):
     """Odhlasi RFID usera (zachova device token - ten je per-device, nie per-user)."""

@@ -8,6 +8,8 @@ from documents.views import (
     DocumentVersionsView,
 )
 
+app_name = 'documents'
+
 urlpatterns = [
     path('', DocumentListView.as_view(), name='document-list'),
     path('versions/<uuid:pk>/file/', DocumentVersionFileView.as_view(), name='document-version-file'),
