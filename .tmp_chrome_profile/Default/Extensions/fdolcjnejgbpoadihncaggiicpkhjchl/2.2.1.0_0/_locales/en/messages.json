@@ -1,0 +1,47 @@
+{
+   "appDescription": {
+      "message": "Component for calling native PKI libraries."
+   },
+   "appName": {
+      "message": "I.CA PKI Service Component"
+   },
+   "optionsInactivePageTimeoutLabel": {
+      "message": "Time to close app after the last user action. Recommended 600 [s]"
+   },
+   "optionsLoggingEnabledLabel": {
+      "message": "Enable logging to console"
+   },
+   "optionsPageClosedTimeoutLabel": {
+      "message": "Time to close app after the page was closed. Recommended 10 [s]"
+   },
+   "optionsRestoreLabel": {
+      "message": "Restore"
+   },
+   "optionsRestoredLabel": {
+      "message": "Options restored"
+   },
+   "optionsSaveLabel": {
+      "message": "Save"
+   },
+   "optionsSavedLabel": {
+      "message": "Options saved"
+   },
+   "optionsTitleLabel": {
+      "message": "Options Page"
+   },
+   "permissionsAllowText": {
+      "message": "Alow authorization for following websites:"
+   },
+   "permissionsDetailText": {
+      "message": "Settings can be adjusted later in Extensions & Themes"
+   },
+   "permissionsSetDone": {
+      "message": "Set done, now you can exit this page"
+   },
+   "permissionsSetPerms": {
+      "message": "Set Authorization"
+   },
+   "permissionsTitleLabel": {
+      "message": "Set Authorization"
+   }
+}

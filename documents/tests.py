@@ -362,12 +362,10 @@ class DocumentModelTests(TestCase):
 # ---------------------------------------------------------------------------
 # Viditelnost (documents/services.py) a API
 # ---------------------------------------------------------------------------
-from datetime import timedelta  # noqa: E402
-
 from rest_framework.test import APIClient  # noqa: E402
 
-from core.testutils import auth_client, make_document, make_user  # noqa: E402
-from documents.models import DocumentVisibilityRule  # noqa: E402
+from core.testutils import auth_client, make_assignment, make_document, make_user  # noqa: E402
+from documents.models import DocumentAssignment  # noqa: E402
 from documents.services import (  # noqa: E402
     get_required_users,
     get_unsigned_documents,
@@ -397,125 +395,61 @@ class VisibilityServiceTests(TestCase):
         doc = make_document(with_file=False, is_active=False)
         self.assertNotIn(doc.pk, self.visible_pks())
 
-    def test_required_bu_blocks_other_bu(self):
-        doc = make_document(with_file=False, required_bu=self.bu2)
+    def test_assignment_bu_blocks_other_bu(self):
+        doc = make_document(with_file=False)
+        make_assignment(doc, DocumentAssignment.TARGET_BUSINESS_UNIT, business_units=[self.bu2])
         self.assertNotIn(doc.pk, self.visible_pks())
 
-    def test_required_bu_allows_matching_bu(self):
-        doc = make_document(with_file=False, required_bu=self.bu1)
+    def test_assignment_bu_allows_matching_bu(self):
+        doc = make_document(with_file=False)
+        make_assignment(doc, DocumentAssignment.TARGET_BUSINESS_UNIT, business_units=[self.bu1])
         self.assertIn(doc.pk, self.visible_pks())
 
-    def test_required_bu_blocks_user_without_bu(self):
+    def test_assignment_bu_blocks_user_without_bu(self):
         loner = make_user(business_unit=None)
-        doc = make_document(with_file=False, required_bu=self.bu1)
+        doc = make_document(with_file=False)
+        make_assignment(doc, DocumentAssignment.TARGET_BUSINESS_UNIT, business_units=[self.bu1])
         self.assertNotIn(doc.pk, self.visible_pks(loner))
 
-    def test_required_pc_gate(self):
-        doc_ok = make_document(with_file=False, required_pc=self.pc1)
-        doc_blocked = make_document(with_file=False, required_pc=self.pc2)
+    def test_assignment_pc_gate(self):
+        doc_ok = make_document(with_file=False)
+        make_assignment(doc_ok, DocumentAssignment.TARGET_PROFESSION_CATEGORY,
+                        profession_categories=[self.pc1])
+        doc_blocked = make_document(with_file=False)
+        make_assignment(doc_blocked, DocumentAssignment.TARGET_PROFESSION_CATEGORY,
+                        profession_categories=[self.pc2])
         self.assertIn(doc_ok.pk, self.visible_pks())
         self.assertNotIn(doc_blocked.pk, self.visible_pks())
 
-    def test_inclusion_bu_rule_must_match(self):
+    def test_assignment_both_requires_bu_and_pc(self):
         doc = make_document(with_file=False)
-        DocumentVisibilityRule.objects.create(
-            document=doc,
-            rule_type=DocumentVisibilityRule.RULE_BUSINESS_UNIT,
-            business_unit=self.bu2,
-        )
-        self.assertNotIn(doc.pk, self.visible_pks())
-
-        DocumentVisibilityRule.objects.create(
-            document=doc,
-            rule_type=DocumentVisibilityRule.RULE_BUSINESS_UNIT,
-            business_unit=self.bu1,
-        )
+        make_assignment(doc, DocumentAssignment.TARGET_BOTH,
+                        business_units=[self.bu1], profession_categories=[self.pc1])
         self.assertIn(doc.pk, self.visible_pks())
+        wrong_pc = make_user(business_unit=self.bu1, profession_code=self.pc2)
+        self.assertNotIn(doc.pk, self.visible_pks(wrong_pc))
 
-    def test_inclusion_all_matches_everyone(self):
-        doc = make_document(with_file=False)
-        DocumentVisibilityRule.objects.create(
-            document=doc, rule_type=DocumentVisibilityRule.RULE_ALL
-        )
-        self.assertIn(doc.pk, self.visible_pks())
-        self.assertIn(doc.pk, self.visible_pks(make_user()))
-
-    def test_user_explicit_rule(self):
+    def test_assignment_explicit_user(self):
         other = make_user()
         doc = make_document(with_file=False)
-        DocumentVisibilityRule.objects.create(
-            document=doc, rule_type=DocumentVisibilityRule.RULE_USER_EXPLICIT, user=other
-        )
+        make_assignment(doc, DocumentAssignment.TARGET_USER, users=[other])
         self.assertNotIn(doc.pk, self.visible_pks())
         self.assertIn(doc.pk, self.visible_pks(other))
 
-    def test_both_rule_requires_both(self):
+    def test_assignment_all_visible_to_everyone(self):
         doc = make_document(with_file=False)
-        DocumentVisibilityRule.objects.create(
-            document=doc,
-            rule_type=DocumentVisibilityRule.RULE_BOTH,
-            business_unit=self.bu1,
-            profession_category=self.pc2,  # pc nesedi
-        )
-        self.assertNotIn(doc.pk, self.visible_pks())
-
-        DocumentVisibilityRule.objects.create(
-            document=doc,
-            rule_type=DocumentVisibilityRule.RULE_BOTH,
-            business_unit=self.bu1,
-            profession_category=self.pc1,
-        )
+        make_assignment(doc, DocumentAssignment.TARGET_ALL)
         self.assertIn(doc.pk, self.visible_pks())
-
-    def test_exclusion_rule_removes_document(self):
-        doc = make_document(with_file=False)
-        DocumentVisibilityRule.objects.create(
-            document=doc, rule_type=DocumentVisibilityRule.RULE_ALL
-        )
-        DocumentVisibilityRule.objects.create(
-            document=doc,
-            rule_type=DocumentVisibilityRule.RULE_USER_EXPLICIT,
-            user=self.user,
-            is_exclusion=True,
-        )
-        self.assertNotIn(doc.pk, self.visible_pks())
         self.assertIn(doc.pk, self.visible_pks(make_user()))
-
-    def test_rule_outside_time_window_is_ignored(self):
-        now = timezone.now()
-        doc = make_document(with_file=False)
-        # exspirovana inclusion BU2 - ignoruje sa, dokument ostava viditelny vsetkym
-        DocumentVisibilityRule.objects.create(
-            document=doc,
-            rule_type=DocumentVisibilityRule.RULE_BUSINESS_UNIT,
-            business_unit=self.bu2,
-            valid_to=now - timedelta(days=1),
-        )
-        self.assertIn(doc.pk, self.visible_pks())
-
-        # buduca exclusion sa tiez ignoruje
-        DocumentVisibilityRule.objects.create(
-            document=doc,
-            rule_type=DocumentVisibilityRule.RULE_ALL,
-            is_exclusion=True,
-            valid_from=now + timedelta(days=1),
-        )
-        self.assertIn(doc.pk, self.visible_pks())
 
     def test_get_required_users_inverse(self):
         other_bu_user = make_user(business_unit=self.bu2)
-        doc = make_document(with_file=False, required_bu=self.bu1)
+        doc = make_document(with_file=False)
+        make_assignment(doc, DocumentAssignment.TARGET_BUSINESS_UNIT, business_units=[self.bu1])
 
         required = set(get_required_users(doc).values_list('pk', flat=True))
         self.assertIn(self.user.pk, required)
         self.assertNotIn(other_bu_user.pk, required)
-
-    def test_get_required_users_exclusion_all_means_nobody(self):
-        doc = make_document(with_file=False)
-        DocumentVisibilityRule.objects.create(
-            document=doc, rule_type=DocumentVisibilityRule.RULE_ALL, is_exclusion=True
-        )
-        self.assertEqual(get_required_users(doc).count(), 0)
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -563,7 +497,9 @@ class DocumentApiTests(TestCase):
         self.user = make_user(business_unit=self.bu1)
         self.client = auth_client(self.user)
         self.visible_doc = make_document(title='Viditelny', with_file=True)
-        self.hidden_doc = make_document(title='Skryty', with_file=True, required_bu=self.bu2)
+        self.hidden_doc = make_document(title='Skryty', with_file=True)
+        make_assignment(self.hidden_doc, DocumentAssignment.TARGET_BUSINESS_UNIT,
+                        business_units=[self.bu2])
 
     def test_list_requires_auth(self):
         response = APIClient().get('/api/documents/')

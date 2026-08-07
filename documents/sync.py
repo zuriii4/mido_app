@@ -30,7 +30,6 @@ def sync_documents(client=None, limit=None):
         'unchanged': 0, 'skipped_no_number': 0, 'deactivated': 0, 'errors': 0,
     }
 
-    # nazbieraj polozky (potrebujeme ich zoskupit podla cisla dokumentu)
     items = []
     for page in client.iter_document_items():
         for item in page:
@@ -79,7 +78,7 @@ def _sync_document_group(client, number, group, run_started_at, stats):
     )
     stats['documents'] += 1
 
-    # metadata dokumentu berieme z najnovsej (najvyssej) verzie v skupine
+    # metadata dokumentu berieme z najnovsej verzie v skupine
     latest = max(group, key=lambda it: _version_key(it['version_label']))
     document.title = latest['title']
     document.ac_dokument_id = latest['ac_dokument_id']
@@ -138,7 +137,7 @@ def _sync_one_version(client, document, item, stats):
         version.file_path.delete(save=False)
     filename = f"{document.id}_{item['sharepoint_id']}_v{version.version_label}.pdf"
     version.file_path.save(filename, ContentFile(pdf_bytes), save=False)
-    version.etag = item['etag']  # etag az po uspesnom stiahnuti (idempotencia pri padoch)
+    version.etag = item['etag']  # etag az po uspesnom stiahnuti
     version.save()
 
     reconcile_attachments(client, document, version)
@@ -208,6 +207,9 @@ def reconcile_attachments(client, document, version):
                 document.title, len(remote_attachments), version.version_label)
 
 
+# TODO: management command clean_media - mazanie sirotskych suborov z media/ (nereferencovanych
+# v DocumentVersion.file_path ani Attachment.file_path), s --dry-run flagom.
+# Uzitocne po testoch, ktore leakuju subory do media/ (core/testutils.make_document).
 def sweep_attachments(client=None):
     """Periodicky prejde VSETKY aktivne dokumenty a zosynchronizuje ich prilohy,
     nezavisle od toho, ci sa zmenil etag dokumentu - prilohy su v inej kniznici
@@ -255,7 +257,7 @@ def _sweep_one_document(client, document, version, stats):
         saved_name = _as_pdf_filename(remote['file_name']) if converted_to_pdf else remote['file_name']
 
         if existing is not None:
-            existing.file_path.delete(save=False)  # stary subor nenechavame ako sirotu na disku
+            existing.file_path.delete(save=False)
             existing.file_name = remote['file_name']
             existing.etag = remote['etag']
             existing.server_relative_url = remote['server_relative_url']

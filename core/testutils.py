@@ -39,6 +39,22 @@ def make_document(title=None, with_file=True, version_kwargs=None, **kwargs):
     return document
 
 
+def make_assignment(document, target_type, business_units=(), profession_categories=(), users=()):
+    """Vytvori priradenie dokumentu na jeho aktualnu verziu."""
+    from documents.models import DocumentAssignment
+    assignment = DocumentAssignment.objects.create(
+        document_version=document.current_version,
+        target_type=target_type,
+    )
+    if business_units:
+        assignment.business_units.set(business_units)
+    if profession_categories:
+        assignment.profession_categories.set(profession_categories)
+    if users:
+        assignment.users.set(users)
+    return assignment
+
+
 def make_session(user, device=None, ttl_minutes=10):
     return RfidSession.objects.create(
         user=user,

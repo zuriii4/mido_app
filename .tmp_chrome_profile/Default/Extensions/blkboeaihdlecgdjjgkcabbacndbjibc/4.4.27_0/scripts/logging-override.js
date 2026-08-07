@@ -1,0 +1,1 @@
+["arrive","click","ready","resize"].forEach(function(c){var t=$.fn[c];$.fn[c]=function(){var c=Array.prototype.slice.call(arguments),r=c.slice(-1)[0];c.length<=1?t.apply(this,c):t.apply(this,c.slice(0,-1).concat(function(){try{r.apply(this,arguments)}catch(c){dsCommon.logErrorObject("",c)}}))}});

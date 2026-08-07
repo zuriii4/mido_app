@@ -1,0 +1,10 @@
+{
+   "extensionDescription": {
+      "description": "Description of the extension.",
+      "message": "Rozšírenie D.Bridge 2 umožňuje integráciu web stránok s aplikáciou D.Launcher 2 od firmy DITEC, a.s. pomocou Native Messaging."
+   },
+   "extensionName": {
+      "description": "Name of the extension.",
+      "message": "D.Bridge 2"
+   }
+}

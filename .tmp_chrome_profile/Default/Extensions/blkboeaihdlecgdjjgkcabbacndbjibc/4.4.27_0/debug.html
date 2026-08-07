@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<head>
+  <link href="/stylesheets/debug.css" rel="stylesheet" />
+  <script src="/lib/jquery.min.js"></script>
+  <script src="/lib/luxon.min.js"></script>
+  <script src="/scripts/debug.js"></script>
+  <title>Debug Tool</title>
+</head>
+
+<ds-main-container>
+  <ds-main>
+    <label
+      >Envelope count ping interval:
+      <input id="envelope-count-ping-interval" type="text" />
+      <select id="envelope-count-ping-interval-unit">
+        <option value="milliseconds">milliseconds</option>
+        <option value="seconds">seconds</option>
+        <option value="minutes">minutes</option>
+        <option value="hours">hours</option>
+      </select>
+      <button id="envelope-count-ping-interval-submit">Save</button>
+    </label>
+    <p>
+      <b>Explanation</b><br />
+      Do the check every "x" amount of time. 0 and negative numbers will disable
+      the pinging.<br />
+    </p>
+
+    <label
+      >Debug mode:
+      <select id="envelope-count-debug-mode">
+        <option value="normal">Normal</option>
+        <option value="random">Random</option>
+      </select>
+    </label>
+    <p>
+      <b>Explanation</b><br />
+      <u>Normal mode</u>: This will keep pinging the DS API at the time
+      specified in <i>Envelope count ping interval</i>.<br />
+      <u>Random mode</u>: This will update the badge with a random number at the
+      time specified in <i>Envelope count ping interval</i>.<br />
+    </p>
+
+    <p>Also, remember to reload the extension after changing these values!</p>
+  </ds-main>
+</ds-main-container>

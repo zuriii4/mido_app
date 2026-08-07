@@ -1,6 +1,5 @@
 from inspect import Signature
 
-from django.db.models import Q
 
 from documents.services import get_required_users
 from notifications.models import Notification
@@ -35,18 +34,14 @@ def mark_notification_as_read(user, pk):
 
 def create_notifications_for_document(document):
     """
-    Creates notifications for all active users
+    Creates notifications for all active users assigned to the current
+    document version (cez DocumentAssignment).
     """
-    if document.required_bu_id is None and document.required_pc_id is None:
+    current = document.current_version
+    if current is None or not current.assignments.active_now().exists():
         return 0
 
-    filters = Q(is_active=True)
-    if document.required_bu_id is not None:
-        filters |= Q(business_unit_id=document.required_bu_id)
-    if document.required_pc_id is not None:
-        filters |= Q(profession_code_id=document.required_pc_id)
-
-    users = User.objects.filter(filters)
+    users = get_required_users(document)
 
     already_notified_ids = set(
         Notification.objects.filter(document=document).values_list('user_id', flat=True)
@@ -89,7 +84,8 @@ def get_unsigned_users_for_document(document):
     Returns a queryset of users who have not signed the given document.
     """
 
-    if document.required_bu_id is None and document.required_pc_id is None:
+    current = document.current_version
+    if current is None or not current.assignments.active_now().exists():
         return User.objects.none()
 
     signed_users_ids = get_signed_users_for_document(document).values_list('id', flat=True)

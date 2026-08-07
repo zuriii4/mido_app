@@ -1,0 +1,20 @@
+{
+   "appDesc": {
+      "message": "Altijd toegang tot Docusign eSignature als u in Chrome werkt."
+   },
+   "appName": {
+      "message": "Docusign eSignature voor Chrome"
+   },
+   "chromeMenuMe": {
+      "message": "Alleen ik"
+   },
+   "chromeMenuMeandothers": {
+      "message": "Ik en anderen"
+   },
+   "chromeMenuOthers": {
+      "message": "Alleen anderen"
+   },
+   "chromeMenuSign": {
+      "message": "Wie moet ondertekenen?"
+   }
+}

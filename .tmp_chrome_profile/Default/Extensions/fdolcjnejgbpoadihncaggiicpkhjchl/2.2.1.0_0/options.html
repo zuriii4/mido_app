@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title id="titleLabel">Options Page</title>
+    <link rel="stylesheet" type="text/css" href="options.css">
+</head>
+<body>
+<div id="content">
+    <h1>
+        <img src="icons/icon-128.png" title="I.CA PKIService component" alt="I.CA PKIService component">
+        <div id="pageTitle">I.CA PKIService component</div>
+        <div id="pageTitle2">Options Page</div>
+    </h1>
+    <div id="optionsContent">
+        <p>
+            <label>
+                <input type="checkbox" id="loggingEnabled">
+                <span id="loggingEnabledLabel">Enable console logging</span>
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="number" id="pageClosedTimeout">
+                <span id="pageClosedTimeoutLabel">Time to close app after the last user action</span>
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="number" id="inactivePageTimeout">
+                <span id="inactivePageTimeoutLabel">Time to close app after the page was closed</span>
+            </label>
+        </p>
+
+        <p>
+            <div id="status"></div>
+        </p>
+
+        <p>
+            <button id="save">Save</button>
+            <button id="restore_default">Restore</button>
+        </p>
+    </div>
+</div>
+<div class="footer">Copyright (C) První certifikační autorita, a.s.</div>
+<script src="options.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,20 @@
+{
+   "appDesc": {
+      "message": "随时在 Chrome 中访问 Docusign eSignature。"
+   },
+   "appName": {
+      "message": "Docusign eSignature Chrome 浏览器版"
+   },
+   "chromeMenuMe": {
+      "message": "只有我"
+   },
+   "chromeMenuMeandothers": {
+      "message": "我和他人"
+   },
+   "chromeMenuOthers": {
+      "message": "只有他人"
+   },
+   "chromeMenuSign": {
+      "message": "谁需要签名？"
+   }
+}

@@ -1,23 +1,83 @@
 {% extends 'kiosk/base.html' %}
+{% load static %}
 
 {% block title %}MIDo - Dashboard{% endblock %}
 
 {% block content %}
-<div class="container py-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1>Ahoj, {{ user.get_full_name|default:user.username }}!</h1>
-            <p class="text-muted mb-0">Zoznam dokumentov na podpísanie</p>
-        </div>
-        <a href="{% url 'kiosk:logout' %}" class="btn btn-outline-secondary">
+<nav class="kiosk-header navbar navbar-dark">
+    <div class="container-fluid d-flex align-items-center">
+        <a href="{% url 'kiosk:dashboard' %}" class="navbar-brand d-flex align-items-center p-1 m-0">
+            <img src="{% static 'kiosk/assets/logo-tatravagonka-white.svg' %}"
+                    alt="Tatravagonka" height="49" class="d-block">
+        </a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'kiosk:logout' %}" class="btn btn-outline-secondary ms-auto">
             Odhlásiť sa
         </a>
+        {% endif %}
     </div>
+</nav>
 
-    <div class="mt-4">
-        <p class="text-muted">Sem príde zoznam dokumentov (Etapa 3)</p>
-    </div>
+<div class="dashboard-layout">
+    <!-- Lavy stlpec: dokumenty -->
+    <section class="documents-panel">
+        <header class="panel-header">
+            <h2>Dokumenty na podpísanie</h2>
+            <span class="badge-count">{{ documents|length }}</span>
+        </header>
 
+        {% if documents %}
+            <div class="documents-list">
+                {% for doc in documents %}
+                    <a href="#" class="document-card">
+                        <div class="document-icon">&#128196;</div>
+                        <div class="document-info">
+                            <div class="document-number">{{ doc.document_number }}</div>
+                            <div class="document-title">{{ doc.title }}</div>
+                            {% if doc.effective_date %}
+                                <div class="document-meta">Platný od: {{ doc.effective_date|date:"d.m.Y" }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="document-action">&rsaquo;</div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">&#9989;</div>
+                <p>Všetky dokumenty sú podpísané.</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Pravy stlpec: notifikacie -->
+    <aside class="notifications-panel">
+        <header class="panel-header">
+            <h2>Notifikácie</h2>
+            {% if unread_count %}
+                <span class="badge-count badge-alert">{{ unread_count }}</span>
+            {% endif %}
+        </header>
+
+        {% if notifications %}
+            <div class="notifications-list">
+                {% for n in notifications %}
+                    <div class="notification-item {% if not n.is_read %}unread{% endif %}">
+                        <div class="notification-icon">&#128276;</div>
+                        <div class="notification-content">
+                            <div class="notification-message">{{ n.message }}</div>
+                            <div class="notification-doc">{{ n.document.document_number }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">&#128236;</div>
+                <p>Žiadne nové notifikácie.</p>
+            </div>
+        {% endif %}
+    </aside>
 </div>
 {% endblock %}

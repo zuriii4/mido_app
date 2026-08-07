@@ -1,0 +1,1 @@
+chrome.runtime.onMessage({command:"social login - show badge"});

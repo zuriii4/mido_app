@@ -1,0 +1,32 @@
+{
+  "read": {
+    "**": "allow",
+    "**/.env": "deny",
+    "**/.env.*": "deny",
+    "**/secrets/**": "deny",
+    "**/*.pem": "deny",
+    "**/*.key": "deny"
+  },
+
+  "edit": {
+    "**": "allow",
+    "**/.env": "deny",
+    "**/.env.*": "deny",
+    "**/secrets/**": "deny"
+  },
+
+  "write": {
+    "**": "allow",
+    "**/.env": "deny",
+    "**/.env.*": "deny",
+    "**/secrets/**": "deny"
+  },
+
+  "bash": {
+    "cat\\s+.*\\.env.*": "deny",
+    "less\\s+.*\\.env.*": "deny",
+    "grep\\s+.*\\.env.*": "deny",
+    "printenv": "ask",
+    "env$": "ask"
+  }
+}

@@ -17,10 +17,12 @@
             integrity="sha384-0bS8MmNIXqB6KQoBDNiUx5Oeb6or6hXgR2ai9qBcG7M3vR3bGqNmZk2uWvJQ7fZ"
             crossorigin="anonymous"></script>
     <!-- Extra styles -->
-    <link rel="stylesheet" href="{% static 'kiosk/kiosk.css' %}">
+    <link rel="stylesheet" href="{% static 'kiosk/kiosk.css' %}?v=2">
     {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-light d-flex flex-column" style="min-height: 100vh;">
+<body class="d-flex flex-column bg-white" style="height: 100vh; overflow: hidden;">
+
+
 
     <!-- Hlavny obsah -->
     <main class="flex-grow-1">

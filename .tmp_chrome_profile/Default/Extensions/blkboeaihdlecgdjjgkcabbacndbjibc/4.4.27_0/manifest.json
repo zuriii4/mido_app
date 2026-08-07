@@ -1,0 +1,59 @@
+{
+   "action": {
+      "default_icon": {
+         "19": "icons/19.inactive.png",
+         "38": "icons/38.png"
+      },
+      "default_popup": "shell.html",
+      "default_title": "DocuSign"
+   },
+   "background": {
+      "service_worker": "scripts/background.js"
+   },
+   "content_scripts": [ {
+      "js": [ "lib/jquery.min.js", "lib/jquery.bpopup.min.js", "scripts/common.js", "scripts/shell.js", "scripts/logging-override.js", "content-scripts/dropbox.js" ],
+      "matches": [ "https://www.dropbox.com/*" ]
+   }, {
+      "js": [ "lib/jquery.min.js", "lib/jquery.bpopup.min.js", "scripts/common.js", "scripts/shell.js", "scripts/logging-override.js", "content-scripts/pdf.js" ],
+      "matches": [ "*://*/*.pdf*", "file://*/*.pdf*" ]
+   }, {
+      "all_frames": true,
+      "js": [ "lib/jquery.min.js", "lib/jquery.bpopup.min.js", "scripts/common.js", "scripts/logging-override.js", "content-scripts/post-landing.js" ],
+      "matches": [ "https://app.docusign.com/home", "https://appdemo.docusign.com/home", "https://*.docusign.net/Member/Home.aspx" ]
+   }, {
+      "js": [ "content-scripts/social-login.js" ],
+      "matches": [ "https://*/chromeext/panel" ],
+      "run_at": "document_start"
+   }, {
+      "all_frames": true,
+      "js": [ "lib/jquery.min.js", "content-scripts/federated-login.js" ],
+      "matches": [ "https://*.docusign.com/username*", "https://*.docusign.net/username*" ]
+   }, {
+      "all_frames": true,
+      "js": [ "content-scripts/forget-password.js" ],
+      "matches": [ "https://*.docusign.net/Member/MemberForgotPassword.aspx*" ],
+      "run_at": "document_start"
+   }, {
+      "js": [ "lib/jquery.min.js", "lib/jquery.bpopup.min.js", "lib/arrive-2.0.0.min.js", "lib/decimal.min.js", "scripts/common.js", "scripts/shell.js", "scripts/logging-override.js", "content-scripts/inbox.js" ],
+      "matches": [ "https://inbox.google.com/*" ]
+   } ],
+   "default_locale": "en",
+   "description": "__MSG_appDesc__",
+   "host_permissions": [ "https://www.dropbox.com/home*", "https://dl-web.dropbox.com/get*", "https://*.docusign.com/*", "https://*.docusign.net/Member/*", "https://chromeext/*" ],
+   "icons": {
+      "128": "icons/128.png",
+      "16": "icons/16.png",
+      "48": "icons/48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgsc/bkduGbR1cd+NtMTlSJZyFyrn2X2oKGC02+b5cRNbZoRqqjYBoFukzxmBwZQbag+3rVEBF1mUAgtYIrmn2OU2+zG23s3lfMalwe7yxr69Im+dcSgt1bXqTGkDbANACGK4ntbw7BPq67tzgubt1WO1e/rX5UcaCFVPkrn4BeKy0cC3BfVXryvReR34YWvB9dznwjEHXBBvKkce11+vew54uHtonpiOpaji7Q1FciHMYr16wUdpSqhKZwVwr/OYU2V/lHUsEmU42bY6E2CH7FK6Ul6xgrsAYi/o7Sb62Jzlr0Q1mw+cnh8ST69oQ5z3tNFywfAGfgfnehcjYH1HbQIDAQAB",
+   "manifest_version": 3,
+   "name": "__MSG_appName__",
+   "permissions": [ "storage", "contextMenus" ],
+   "short_name": "DocuSign",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "4.4.27",
+   "web_accessible_resources": [ {
+      "matches": [ "*://*/*" ],
+      "resources": [ "shell.html", "lib/*.js", "scripts/*.js", "content-scripts/gmail.inject.js", "icons/*.png", "/lib/jquery.min.js", "/lib/luxon.min.js" ]
+   } ]
+}

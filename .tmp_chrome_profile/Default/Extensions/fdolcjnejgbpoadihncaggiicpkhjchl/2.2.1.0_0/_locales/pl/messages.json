@@ -1,0 +1,47 @@
+{
+   "appDescription": {
+      "message": "Komponent do wywoływania rodzimych bibliotek I.CA z usługami PKI."
+   },
+   "appName": {
+      "message": "I.CA PKI komponent usługi"
+   },
+   "optionsInactivePageTimeoutLabel": {
+      "message": "Czas zamknąć aplikację po ostatniej akcji użytkownika. Zalecane 600 [s]"
+   },
+   "optionsLoggingEnabledLabel": {
+      "message": "Włącz rejestrowanie w konsoli"
+   },
+   "optionsPageClosedTimeoutLabel": {
+      "message": "Czas zamknąć aplikację po zamknięciu strony. Zalecane 10 [s]"
+   },
+   "optionsRestoreLabel": {
+      "message": "Przywracać"
+   },
+   "optionsRestoredLabel": {
+      "message": "Opcje przywrócone"
+   },
+   "optionsSaveLabel": {
+      "message": "Zapisz"
+   },
+   "optionsSavedLabel": {
+      "message": "Opcje zapisane"
+   },
+   "optionsTitleLabel": {
+      "message": "Strona opcji"
+   },
+   "permissionsAllowText": {
+      "message": "Kliknij, aby włączyć uprawnienia rozszerzeń dla następujących witryn:"
+   },
+   "permissionsDetailText": {
+      "message": "Możesz dostosować ustawienia później w ustawieniach dodatków na karcie Uprawnienia."
+   },
+   "permissionsSetDone": {
+      "message": "Uprawnienia ustawione, ta strona zostanie teraz zamknięta"
+   },
+   "permissionsSetPerms": {
+      "message": "Ustaw uprawnienia"
+   },
+   "permissionsTitleLabel": {
+      "message": "Ustawienia uprawnień"
+   }
+}

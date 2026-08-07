@@ -1,0 +1,21 @@
+{
+   "background": {
+      "service_worker": "js/background.js"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "js/content_scripts.js" ],
+      "matches": [ "*://*.docusign.net/Signing/*", "https://*.docusign.mil/Signing/*", "*://*.docusign.com/Signing/*" ]
+   } ],
+   "description": "Docusign PKI.",
+   "icons": {
+      "16": "icon16.png",
+      "64": "icon64.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0iBS3gdMTj4ibPVnZjEVSTfDpKCsGJW90MMwaaDy2McD0LkCrZ3nU/5LuDI3hvyJUAIkIM7O8QPwTSd4nfTLIJoCMEuSUwjiVvz+5ObhBwcrfXTMO1dXCnRNfTp2xLggedjSU7LMvagUhIkHjBGDeVjeq+9d8xQJ6Cj3EIUUQ3mddiPJUyU6a55NQD4E6zHkQL5eGpHYmICUDKB3iiH6eLJvdq6Q7/SJGqVYtv01xjMC289jzlcPhlVqG3QM4jlEyg2sXJpFJ0XSiEaQEPG4pukmeL3PzCH8KQqYOdK4LU7/XsIaST4vbBIUewyvoyvrqBkfpnpzTHmWvuTBSONP3QIDAQAB",
+   "manifest_version": 3,
+   "name": "Docusign PKI",
+   "permissions": [ "nativeMessaging" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "25.1.00.00"
+}

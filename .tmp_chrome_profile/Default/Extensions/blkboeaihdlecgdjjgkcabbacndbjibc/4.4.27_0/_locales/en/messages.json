@@ -1,0 +1,20 @@
+{
+   "appDesc": {
+      "message": "Access Docusign eSignature anytime you’re in Chrome."
+   },
+   "appName": {
+      "message": "Docusign eSignature for Chrome"
+   },
+   "chromeMenuMe": {
+      "message": "Only Me"
+   },
+   "chromeMenuMeandothers": {
+      "message": "Me and Others"
+   },
+   "chromeMenuOthers": {
+      "message": "Only Others"
+   },
+   "chromeMenuSign": {
+      "message": "Who needs to Sign?"
+   }
+}

@@ -1,0 +1,1 @@
+window!==window.top&&(window.top.postMessage({message:"dsIframeModalClose"},"*"),window.open(window.location.href,"_blank"));

@@ -5,8 +5,8 @@ from django.core.files.base import ContentFile
 from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 
-from core.testutils import auth_client, make_document, make_session, make_user
-from documents.models import DocumentVersion
+from core.testutils import auth_client, make_assignment, make_document, make_session, make_user
+from documents.models import DocumentAssignment, DocumentVersion
 from rfid_auth.models import KioskDevice
 from signatures.models import Signature
 from users.models import BusinessUnit
@@ -80,7 +80,9 @@ class SignApiTests(TestCase):
 
     def test_invisible_document_returns_400(self):
         other_bu = BusinessUnit.objects.create(code='INA-BU')
-        hidden = make_document(with_file=True, required_bu=other_bu)
+        hidden = make_document(with_file=True)
+        make_assignment(hidden, DocumentAssignment.TARGET_BUSINESS_UNIT,
+                        business_units=[other_bu])
         response = self.sign(version_id=hidden.current_version.pk)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Signature.objects.count(), 0)

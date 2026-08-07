@@ -1,0 +1,31 @@
+{
+   "action": {
+      "default_icon": "icons/icon-38-no-padding.png",
+      "default_title": "__MSG_appName__"
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "default_locale": "en",
+   "description": "__MSG_appDescription__",
+   "externally_connectable": {
+      "matches": [ "*://localhost/*", "*://*.localhost/*", "https://*.csob.cz/*", "https://*.csob.sk/*", "*://*.ica.cz/*", "*://*.proebiz.com/*", "*://*.digisign.org/*", "*://*.digisign.digital.cz/*", "*://*.circularo.com/*", "*://*.eon.com/*", "https://eonos.sharepoint.com/*", "https://*.narodni-ca.gov.cz/*", "*://*.servis.justice.cz/*", "*://pmstest002/*", "*://*.sukl.cz/*", "*://*.tatra.cz/*", "*://*.moneta.cz/*", "*://*.tsk-praha.cz/*", "*://*.brantner.sk/*" ]
+   },
+   "host_permissions": [ "*://*.ica.cz/*", "*://*.csob.cz/*", "*://*.csob.sk/*", "*://*.proebiz.com/*", "*://localhost/*" ],
+   "icons": {
+      "128": "icons/icon-128.png",
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmU1A3UBYn1PKm82HabsAZwy3DvG0LVkbsSeOXXo1cB47DkjZ0Ab/RqsdMtUHMBdGa3ZZM5XO6/9tSLm/HnAAin4V/b6KWeyfhVr/49HRzMJIK/2wgqDmhePDWm/UqBXZTzEO4gWzZAjtGDIItdkpJ4qkHhVMKR6u4nJEzE/ETFVxPe60NX8TNPx4HkNcUPkSzaX6YslC95dX8sWALzF0lL/pRBto97h0ZthoOTDIngcak28dkAb4RKcQSIqgfzGBVRBXo1SkQzGGmYIQPPLVrXCoMbRaVEDlq/R0viaocsAEBaq/FwWI75HuN6TQgsUCQ0w9zcjahdLmhUEhvpAFLQIDAQAB",
+   "manifest_version": 3,
+   "name": "__MSG_appName__",
+   "options_ui": {
+      "open_in_tab": true,
+      "page": "options.html"
+   },
+   "permissions": [ "nativeMessaging", "activeTab", "storage", "cookies" ],
+   "short_name": "I.CA PKI",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.2.1.0"
+}

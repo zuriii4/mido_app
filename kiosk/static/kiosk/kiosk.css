@@ -1,9 +1,7 @@
 /* === Kiosk styles === */
 
-/* Google Fonts - Rajdhani (Tatravagonka brand font) */
 @import url('https://fonts.googleapis.com/css?family=Rajdhani:400,500,600,700&display=swap');
 
-/* === Tatravagonka farebna paleta === */
 :root {
     --tv-blue: #003366;        /* primarna - logo, nadpisy */
     --tv-blue-dark: #002952;   /* hover, aktivne */
@@ -17,12 +15,10 @@
 
 /* === Global styles === */
 html, body {
-    /* Kiosk mod - ziaden kurzor */
-    cursor: none;
+    /* cursor: none; */
 }
 
 html {
-    /* Skrytie textu selection (kiosk) */
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -105,12 +101,33 @@ p, label, input, button, .lead {
     z-index: 1;
 }
 
+/* === Kiosk header (logo vlavo, logout vpravo) === */
+.kiosk-header {
+    padding: 0.5rem 1.5rem;
+    background: var(--tv-blue-dark);
+    border-bottom: 2px solid var(--tv-gold);
+    flex-shrink: 0;
+}
+
+/* Logo v navbare - vynulovanie padding z .navbar-brand */
+.kiosk-header .navbar-brand {
+    margin-right: 1rem;
+}
+
+.kiosk-header .navbar-brand img {
+    height: 50px;
+    width: auto;
+    display: block;
+}
+
+.kiosk-header .kiosk-logo img {
+    max-width: 180px;
+    height: auto;
+    display: block;
+}
+
 /* === Kiosk logo (top-left) === */
 .kiosk-logo {
-    position: fixed;
-    top: 1.5rem;
-    left: 1.5rem;
-    z-index: 100;
     display: block;
     transition: transform 0.2s;
 }
@@ -472,4 +489,224 @@ p, label, input, button, .lead {
 
 .kiosk-setup-form button {
     min-width: 200px;
+}
+
+
+
+
+/* === Dashboard layout (2 stlpce) === */
+.dashboard-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    height: 100%;
+    min-height: 0;
+    padding: 1.5rem;
+    overflow: hidden;
+}
+
+.documents-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    background: var(--tv-white);
+    border-radius: 4px;
+    overflow: hidden;
+    min-height: 0;
+    height: 100%;
+}
+.notifications-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--tv-white);
+    border-radius: 4px;
+    overflow: hidden;
+    min-height: 0;
+    height: 100%;
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--tv-blue);
+    color: var(--tv-white);
+    border-bottom: 2px solid var(--tv-gold);
+    flex-shrink: 0;
+}
+
+.panel-header h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    color: var(--tv-gold);
+}
+
+.badge-count {
+    background: var(--tv-gold);
+    color: var(--tv-blue);
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 1rem;
+}
+
+.badge-alert {
+    background: #dc3545;
+    color: var(--tv-white);
+}
+
+/* Dokumenty - karty */
+.documents-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.document-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    min-height: 100px;
+    background: var(--tv-light);
+    border: 2px solid transparent;
+    border-radius: 4px;
+    color: var(--tv-dark);
+    text-decoration: none;
+    transition: all 0.15s ease-out;
+}
+
+.document-card:hover,
+.document-card:focus {
+    background: var(--tv-white);
+    border-color: var(--tv-gold);
+    transform: translateX(4px);
+    color: var(--tv-dark);
+    text-decoration: none;
+}
+
+.document-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    width: 60px;
+    text-align: center;
+}
+
+.document-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.document-number {
+    font-family: 'Rajdhani', monospace;
+    font-size: 0.95rem;
+    color: var(--tv-blue);
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.document-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--tv-dark);
+    margin: 0.25rem 0;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.document-meta {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.document-action {
+    font-size: 2.5rem;
+    color: var(--tv-blue);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Notifikacie */
+.notifications-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--tv-light);
+    border-left: 4px solid var(--tv-gray);
+    border-radius: 2px;
+}
+
+.notification-item.unread {
+    background: #fff8e6;
+    border-left-color: var(--tv-gold);
+}
+
+.notification-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-message {
+    font-size: 1.05rem;
+    color: var(--tv-dark);
+    line-height: 1.3;
+    margin-bottom: 0.25rem;
+}
+
+.notification-doc {
+    font-family: 'Rajdhani', monospace;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Empty state */
+.empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    color: #999;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    font-size: 1.25rem;
+    margin: 0;
+    color: var(--tv-dark);
+}
+
+main.flex-grow-1 {
+    min-height: 0;
+    overflow: hidden;
 }

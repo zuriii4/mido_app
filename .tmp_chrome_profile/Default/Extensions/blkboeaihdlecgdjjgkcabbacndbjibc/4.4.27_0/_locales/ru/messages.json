@@ -1,0 +1,20 @@
+{
+   "appDesc": {
+      "message": "Открывайте Docusign eSignature прямо из Chrome."
+   },
+   "appName": {
+      "message": "Docusign eSignature для Chrome"
+   },
+   "chromeMenuMe": {
+      "message": "Только я"
+   },
+   "chromeMenuMeandothers": {
+      "message": "Я и другие участники"
+   },
+   "chromeMenuOthers": {
+      "message": "Только другие участники"
+   },
+   "chromeMenuSign": {
+      "message": "Кому необходимо подписывать?"
+   }
+}

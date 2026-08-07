@@ -1,0 +1,58 @@
+{
+   "action": {
+      "default_icon": {
+         "128": "static/logo-128.png",
+         "16": "static/logo-16.png",
+         "32": "static/logo-32.png",
+         "512": "static/logo-512.png",
+         "64": "static/logo-64.png"
+      }
+   },
+   "author": "pom",
+   "background": {
+      "service_worker": "autogram-background.bundle.js",
+      "type": "module"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "autogram-content.bundle.js" ],
+      "matches": [ "https://www.slovensko.sk/*", "https://prihlasenie.slovensko.sk/*", "https://schranka.slovensko.sk/*", "https://schranka.upvsfixnew.gov.sk/*", "https://pfseform.financnasprava.sk/*", "https://www.financnasprava.sk/*", "https://cep.financnasprava.sk/*", "https://www.cep.financnasprava.sk/*", "https://eformulare.socpoist.sk/*", "https://sluzby.orsr.sk/*", "https://obcan.justice.sk/*", "https://city-account-next.dev.bratislava.sk/*", "https://city-account-next.staging.bratislava.sk/*", "https://konto.bratislava.sk/*" ],
+      "run_at": "document_start"
+   }, {
+      "all_frames": true,
+      "css": [ "static/upvs-fix-sksk.css" ],
+      "matches": [ "*://*.slovensko.sk/*", "*://slovensko.sk/*" ],
+      "run_at": "document_start"
+   }, {
+      "all_frames": true,
+      "css": [ "static/upvs-fix-schranka-sksk.css" ],
+      "matches": [ "*://*.schranka.slovensko.sk/*", "*://schranka.slovensko.sk/*" ],
+      "run_at": "document_start"
+   } ],
+   "default_locale": "sk",
+   "description": "__MSG_appDesc__",
+   "homepage_url": "https://sluzby.slovensko.digital/autogram/",
+   "icons": {
+      "128": "static/logo-128.png",
+      "16": "static/logo-16.png",
+      "32": "static/logo-32.png",
+      "512": "static/logo-512.png",
+      "64": "static/logo-64.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj4iyywlwmasQCofcyD2DKcdxwYn4oYra7+RgkjsLWpxsTmbKbpo2C8OGQr/B7PZN8iv02O2z3EkV9IiU9q1NPL9utXghNikjiwaxerzpw3gHYam7KXfBaJHczbYMj1txBbWlSg8+xnYW3xn+U9HGbKeezlZABMRkwSFbYTiekMFJiGC8/q5jRK7ruNTOoi6m/q02766cZFXIIrWYiGXkyzO2A/wgILyRGkTylnts+7avqqoneYASEQ8UpTqSH4mzdC/KhdbAyRCJ/CBh1NrJhRgp6l55zKpCQh4rZjALKxreENI/aHrfO6GMM/c+hR/AdK49ve9yPMDqD+/fJWJOxQIDAQAB",
+   "manifest_version": 3,
+   "name": "__MSG_appName__",
+   "options_page": "static/options.html",
+   "options_ui": {
+      "browser_style": true,
+      "open_in_tab": true,
+      "page": "static/options.html"
+   },
+   "permissions": [ "storage", "alarms" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "3.3.0",
+   "web_accessible_resources": [ {
+      "matches": [ "https://www.slovensko.sk/*", "https://prihlasenie.slovensko.sk/*", "https://schranka.slovensko.sk/*", "https://schranka.upvsfixnew.gov.sk/*", "https://pfseform.financnasprava.sk/*", "https://www.financnasprava.sk/*", "https://cep.financnasprava.sk/*", "https://www.cep.financnasprava.sk/*", "https://eformulare.socpoist.sk/*", "https://sluzby.orsr.sk/*", "https://obcan.justice.sk/*", "https://city-account-next.dev.bratislava.sk/*", "https://city-account-next.staging.bratislava.sk/*", "https://konto.bratislava.sk/*" ],
+      "resources": [ "autogram-background.bundle.js", "autogram-background.bundle.js.map", "autogram-content.bundle.js", "autogram-content.bundle.js.map", "autogram-inject.bundle.js", "autogram-inject.bundle.js.map", "autogram-injectIntervalDetectDitec.bundle.js", "autogram-injectIntervalDetectDitec.bundle.js.map", "autogram-popup.bundle.js", "autogram-popup.bundle.js.map", "autogram-options.bundle.js", "autogram-options.bundle.js.map", "autogram-redirect.bundle.js", "autogram-redirect.bundle.js.map", "static/logo-64.png" ]
+   } ]
+}

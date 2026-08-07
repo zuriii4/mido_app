@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="options.css">
+		<title>Nastavení oprávnění</title>
+	</head>
+	<body>
+		<div id="content">
+			<h1>
+				<img src="icons/icon-128.png" title="I.CA PKIService component" alt="I.CA PKIService component">
+				<div id="pageTitle">I.CA PKIService component</div>
+				<div id="pageTitle2">Nastavení oprávnění</div>
+			</h1>
+
+			<p id="permissionsAllowText" style="text-align: center;">Kliknutím povolíte extension oprávnění pro následující weby:</p>
+			<table align="center" style="font-weight: bold;">
+				<tr><td>ica.cz</td></tr>
+				<tr><td>csob.cz</td></tr>
+				<tr><td>csob.sk</td></tr>
+				<tr><td>proebiz.com</td></tr>
+			</table>
+			<p id="permissionsDetailText" style="text-align: center;">Nastavení můžete později upravit v nastavení doplňků pod záložkou Oprávnění.</p>
+			<p style="text-align: center;"><input type="button" id="addPermissions" value="Nastavit oprávnění" /></p>
+			<p>&nbsp;</p>
+			<p id="addPermissionsRes" style="color: green; text-align: center; display: none;">Oprávnění nastaveno, nyní bude tato stránka zavřena</p>
+		</div>
+	</body>
+	<script src="permissions.js"></script>
+</html>

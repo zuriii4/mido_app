@@ -1,0 +1,47 @@
+{
+   "appDescription": {
+      "message": "Komponenta pro volání nativních knihoven I.CA s PKI službami."
+   },
+   "appName": {
+      "message": "Komponenta I.CA PKI Service"
+   },
+   "optionsInactivePageTimeoutLabel": {
+      "message": "Čas do uzavření aplikace po poslední uživatelské akci. Doporučeno 600 [s]."
+   },
+   "optionsLoggingEnabledLabel": {
+      "message": "Povolit logování na konzoli"
+   },
+   "optionsPageClosedTimeoutLabel": {
+      "message": "Čas do uzavření aplikace po zavření stránky. Doporučeno 10 [s]."
+   },
+   "optionsRestoreLabel": {
+      "message": "Obnovit"
+   },
+   "optionsRestoredLabel": {
+      "message": "Nastavení obnoveno"
+   },
+   "optionsSaveLabel": {
+      "message": "Uložit"
+   },
+   "optionsSavedLabel": {
+      "message": "Nastavení uloženo"
+   },
+   "optionsTitleLabel": {
+      "message": "Stránka nastavení"
+   },
+   "permissionsAllowText": {
+      "message": "Kliknutím povolíte extension oprávnění pro následující weby:"
+   },
+   "permissionsDetailText": {
+      "message": "Nastavení můžete později upravit v nastavení doplňků pod záložkou Oprávnění."
+   },
+   "permissionsSetDone": {
+      "message": "Oprávnění nastaveno, nyní bude tato stránka zavřena"
+   },
+   "permissionsSetPerms": {
+      "message": "Nastavit oprávnění"
+   },
+   "permissionsTitleLabel": {
+      "message": "Nastavení oprávnění"
+   }
+}

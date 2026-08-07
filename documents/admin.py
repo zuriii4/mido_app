@@ -1,6 +1,7 @@
 from django.contrib import admin
-
-from documents.models import Attachment, Document, DocumentVersion, DocumentVisibilityRule
+from django import forms
+from django.core.exceptions import ValidationError
+from documents.models import Attachment, Document, DocumentAssignment, DocumentVersion
 
 
 class DocumentVersionInline(admin.TabularInline):
@@ -31,11 +32,35 @@ class AttachmentAdmin(admin.ModelAdmin):
     search_fields = ('file_name',)
 
 
-@admin.register(DocumentVisibilityRule)
-class DocumentVisibilityRuleAdmin(admin.ModelAdmin):
-    list_display = ('document', 'rule_type', 'is_exclusion', 'business_unit',
-                    'profession_category', 'user', 'valid_from', 'valid_to')
-    list_filter = ('rule_type', 'is_exclusion')
-    search_fields = ('document__title',)
-    autocomplete_fields = ('document',)
-    raw_id_fields = ('user',)
+class DocumentAssignmentForm(forms.ModelForm):
+    class Meta:
+        model = DocumentAssignment
+        fields = "__all__"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        target_type = cleaned_data.get("target_type")
+
+        if target_type == "USER" and not cleaned_data.get("users"):
+            raise ValidationError("Pre typ USER vyber aspoň jedného používateľa.")
+        if target_type == "BUSINESS_UNIT" and not cleaned_data.get("business_units"):
+            raise ValidationError("Pre typ BUSINESS_UNIT vyber aspoň jednu business unit.")
+        if target_type == "PROFESSION_CATEGORY" and not cleaned_data.get("profession_categories"):
+            raise ValidationError("Pre typ PROFESSION_CATEGORY vyber aspoň jednu kategóriu.")
+        if target_type == "BOTH" and (
+            not cleaned_data.get("business_units")
+            or not cleaned_data.get("profession_categories")
+        ):
+            raise ValidationError("Pre typ BOTH vyber business unit aj profession category.")
+
+        return cleaned_data
+
+
+@admin.register(DocumentAssignment)
+class DocumentAssignmentAdmin(admin.ModelAdmin):
+    form = DocumentAssignmentForm
+    list_display = ('document_version', 'target_type', 'describe_target', 'valid_from', 'valid_to')
+    list_filter = ('target_type',)
+    search_fields = ('document__document_number', 'document__title')
+    autocomplete_fields = ('document_version',)
+    filter_horizontal = ('business_units', 'profession_categories', 'users')

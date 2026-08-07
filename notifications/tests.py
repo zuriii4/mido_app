@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from documents.models import Document, DocumentVersion
+from documents.models import Document, DocumentAssignment, DocumentVersion
 from notifications.models import Notification
 from notifications.services import (
     create_reminder_notification_for_document,
@@ -22,7 +22,7 @@ class GetSignedUsersTest(TestCase):
             business_unit=bu, is_active=True,
         )
         doc = Document.objects.create(
-            document_number='D1', title='Test Doc', required_bu=bu,
+            document_number='D1', title='Test Doc',
         )
         version = DocumentVersion.objects.create(
             document=doc, version_label='-', is_current=True,
@@ -40,7 +40,7 @@ class GetSignedUsersTest(TestCase):
             business_unit=bu, is_active=True,
         )
         doc = Document.objects.create(
-            document_number='D2', title='Test Doc 2', required_bu=bu,
+            document_number='D2', title='Test Doc 2',
         )
         DocumentVersion.objects.create(document=doc, version_label='-', is_current=True)
 
@@ -58,16 +58,21 @@ class CreateReminderNotificationsTest(TestCase):
     """Test create_reminder_notification_for_document."""
 
     def test_creates_for_user_in_bu(self):
-        """Vytvori notifikaciu pre usera v required_bu."""
+        """Vytvori notifikaciu pre usera v priradenej BU."""
         bu = BusinessUnit.objects.create(code='TBS3')
         user = User.objects.create_user(
             username='remuser1', rfid_uid='RF003', external_id='EX003',
             business_unit=bu, is_active=True,
         )
         doc = Document.objects.create(
-            document_number='D4', title='Doc BU', required_bu=bu,
+            document_number='D4', title='Doc BU',
         )
-        DocumentVersion.objects.create(document=doc, version_label='-', is_current=True)
+        version = DocumentVersion.objects.create(document=doc, version_label='-', is_current=True)
+        assignment = DocumentAssignment.objects.create(
+            document_version=version,
+            target_type=DocumentAssignment.TARGET_BUSINESS_UNIT,
+        )
+        assignment.business_units.add(bu)
 
         count = create_reminder_notification_for_document(doc)
         self.assertGreaterEqual(count, 1)
@@ -81,9 +86,14 @@ class CreateReminderNotificationsTest(TestCase):
             business_unit=bu, is_active=True,
         )
         doc = Document.objects.create(
-            document_number='D5', title='Doc I', required_bu=bu,
+            document_number='D5', title='Doc I',
         )
-        DocumentVersion.objects.create(document=doc, version_label='-', is_current=True)
+        version = DocumentVersion.objects.create(document=doc, version_label='-', is_current=True)
+        assignment = DocumentAssignment.objects.create(
+            document_version=version,
+            target_type=DocumentAssignment.TARGET_BUSINESS_UNIT,
+        )
+        assignment.business_units.add(bu)
 
         count1 = create_reminder_notification_for_document(doc)
         count2 = create_reminder_notification_for_document(doc)
@@ -106,7 +116,7 @@ class CreateReminderNotificationsTest(TestCase):
             business_unit=bu, is_active=True,
         )
         doc = Document.objects.create(
-            document_number='D7', title='Doc MultiVer', required_bu=bu,
+            document_number='D7', title='Doc MultiVer',
         )
         old = DocumentVersion.objects.create(
             document=doc, version_label='-', is_current=False,
@@ -114,6 +124,11 @@ class CreateReminderNotificationsTest(TestCase):
         new = DocumentVersion.objects.create(
             document=doc, version_label='A', is_current=True,
         )
+        assignment = DocumentAssignment.objects.create(
+            document_version=new,
+            target_type=DocumentAssignment.TARGET_BUSINESS_UNIT,
+        )
+        assignment.business_units.add(bu)
         Signature.objects.create(user=user, document_version=old)
 
         count = create_reminder_notification_for_document(doc)

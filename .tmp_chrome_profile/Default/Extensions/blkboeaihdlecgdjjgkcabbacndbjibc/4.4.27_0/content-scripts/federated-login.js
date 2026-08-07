@@ -1,0 +1,1 @@
+$(document).ready(function(){window!==window.top&&$('form[name="ssoLogin"]').attr("target","_blank")});

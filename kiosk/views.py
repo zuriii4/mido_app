@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate
 from django.urls import reverse
@@ -8,7 +8,8 @@ from django.views import View
 from rfid_auth.models import KioskDevice, RfidSession
 from django.conf import settings
 from django.utils import timezone
-from documents.services import get_unsigned_documents
+from documents.services import get_visible_documents
+from notifications.models import Notification
 
 
 class KioskView(View):
@@ -21,7 +22,6 @@ class KioskView(View):
             return redirect('kiosk:device-setup')
         return render(request, self.template_name)
 
-    # Validacia UID
     MIN_UID_LEN = 4
     MAX_UID_LEN = 32
     import re
@@ -104,7 +104,6 @@ class KioskView(View):
             expires_at=timezone.now() + settings.RFID_SESSION_TTL,
         )
         request.session['rfid_token'] = session.token
-        request.session.set_expiry(settings.RFID_SESSION_TTL.total_seconds())
 
         logger.info(f'kiosk login OK: user={user.username}')
 
@@ -126,7 +125,6 @@ class DeviceSetupView(View):
     """
 
     def get(self, request):
-        # Ak uz mame validny device, preskoc na home
         if request.kiosk_device:
             return redirect('kiosk:home')
         return render(request, 'kiosk/device_setup.html')
@@ -143,22 +141,23 @@ class DeviceSetupView(View):
 
         try:
             device = KioskDevice.objects.get(token=token, is_active=True)
+
+            # OK - uloz do session
+            request.session['kiosk_device_token'] = device.token
+            device.last_seen_at = timezone.now()
+            device.save(update_fields=['last_seen_at'])
+
+            if is_htmx:
+                response = HttpResponse(
+                    '<div class="alert alert-success">Token prijatý. Načítavam...</div>',
+                    status=200,
+                )
+                response['HX-Redirect'] = '/kiosk/'
+                return response
+            return redirect('kiosk:home')
+
         except KioskDevice.DoesNotExist:
-            return self._error('Neplatný alebo neaktívny device token.', is_htmx)
-
-        # OK - uloz do session
-        request.session['kiosk_device_token'] = device.token
-        device.last_seen_at = timezone.now()
-        device.save(update_fields=['last_seen_at'])
-
-        if is_htmx:
-            response = HttpResponse(
-                '<div class="alert alert-success">Token prijatý. Načítavam...</div>',
-                status=200,
-            )
-            response['HX-Redirect'] = '/kiosk/'
-            return response
-        return redirect('kiosk:home')
+            return self._error('Neplatný alebo neaktívny device token.', is_htmx)      
 
     def _error(self, message, is_htmx):
         if is_htmx:
@@ -174,13 +173,29 @@ class DashboardView(View):
     template_name = 'kiosk/dashboard.html'
 
     def get(self, request):
-        documents = get_unsigned_documents(request.user)
-        return render(request, self.template_name, {'documents': documents})
+        if not request.rfid_session:
+            return redirect('kiosk:home')
+        documents = get_visible_documents(request.user)
+        print(documents)  
+        notifications = request.user.notifications.filter(is_read=False).order_by('-created_at')[:5]
+        return render(request, self.template_name, {
+            'documents': documents,
+            'notifications': notifications,
+            'unread_count': request.user.notifications.filter(is_read=False).count(),
+        })
 
-
-def document_detail(request, pk):
+class DocumentDetailView(View):
     """Detail dokumentu na podpisanie."""
-    return render(request, 'kiosk/document_detail.html', {'document_pk': pk})
+
+    template_name = 'kiosk/document_detail.html'
+
+    def get(self, request, pk):
+        if not request.rfid_session:
+            return redirect('kiosk:home')
+        document = get_visible_documents(request.user).filter(pk=pk).first()
+        if document is None:
+            return redirect('kiosk:dashboard')
+        return render(request, self.template_name, {'document': document})
 
 
 class LogoutView(View):

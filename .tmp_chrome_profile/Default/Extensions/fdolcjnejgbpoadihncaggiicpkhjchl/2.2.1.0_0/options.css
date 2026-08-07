@@ -1,0 +1,52 @@
+h1 {
+    color: #333333;
+    font-size: 2em;
+    margin: 0 0 2em 0;
+    text-align: center
+}
+
+h1 img {
+    float: left;
+    height: 4em;
+}
+h1 #pageTitle {
+    padding: 0.8em 0 0 0;
+}
+
+#optionsContent {
+    padding: 0 0 0 10px;
+}
+
+#loggingEnabled {
+    margin: 0.3em 3em 0.3em 2.5em;
+}
+
+#pageClosedTimeout, #inactivePageTimeout {
+    width: 3em;
+    margin: 0.3em 3em 0.3em 0em;
+}
+
+#save, #restore_default {
+    width: 5em;
+    margin: 1em 3em 0.3em 0em;
+}
+
+body {
+    background-color: #eee;
+    font-family: arial, sans-serif;
+    font-size: 13px
+}
+
+#content {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin: 40px auto 20px;
+    padding: 32px;
+    width: 650px
+}
+
+.footer {
+    text-align: center;
+    margin-top: 0.4em
+}

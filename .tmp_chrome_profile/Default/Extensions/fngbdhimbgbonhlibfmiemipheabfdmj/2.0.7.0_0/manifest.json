@@ -1,0 +1,34 @@
+{
+   "author": "DITEC, a.s.",
+   "background": {
+      "service_worker": "service_worker.js"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "content.js" ],
+      "matches": [ "\u003Call_urls>" ],
+      "run_at": "document_start"
+   } ],
+   "content_security_policy": {
+   },
+   "default_locale": "en",
+   "description": "__MSG_extensionDescription__",
+   "homepage_url": "https://www.ditec.sk/produkty/d_suite_eidas_klientske_aplikacie_pre_kvalifikovany_elektronicky_podpis",
+   "host_permissions": [ "http://*/*", "https://*/*", "file://*/*" ],
+   "icons": {
+      "128": "dbridge_128.png",
+      "16": "dbridge_16.png",
+      "256": "dbridge_256.png",
+      "32": "dbridge_32.png",
+      "48": "dbridge_48.png",
+      "512": "dbridge_512.png",
+      "64": "dbridge_64.png",
+      "96": "dbridge_96.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnetNCxOAOfZbUBEx5c0BWjRMTQFAqMVfGCkcDAKRAioJXp4tHMCLsFHIYRs2Ek0037OEWeQqmkUcNn3mRkSxv7dw02agwje47wfsx7tmBsuAscdSELIn8lV74eR3mLqIp3b1/iN0WtFArx3YPxRn6AEdehbr0SEKvp7vZxT9y2A+IRw32iQsza3+I4eda3PYP3Z6FSAS6Woj8bTMywkvJ+1i9vbQUyqjk+JgOY6EKHZtOggXQQ1X177pOOg7nwx3u4lybucvT+LnqKHdc3yzn2eey/YuytYk3QRutaD5+0qruBxq1lDBTs1uP4wofIVoPmA8c/D9v6KOk2tFF/Cd0QIDAQAB",
+   "manifest_version": 3,
+   "name": "__MSG_extensionName__",
+   "permissions": [ "nativeMessaging" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.0.7.0"
+}
